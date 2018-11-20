@@ -30,14 +30,17 @@ public class EmailAlertMechanism extends AbstractAlertMechanism{
 	}
 	
 	protected String getRecipient(){
-		return this.getLocalizeAlert().localizeBody(this.getAlertRecipient().getRecipient());
+		return this.getAlertRecipient().getRecipient();
 	}
 	
+	protected String getBody(){
+		return this.getLocalizeAlert().localizeBody(this.getAlertMessage().getBody());		
+	}
 	@Override
 	public void send() throws AddressException, MessagingException {
 
 		String subject = getSubject();
-		String body = this.getAlertMessage().getBody();
+		String body = getBody();
 		String recipient = getRecipient();
 		//Step1		
 		Properties mailServerProperties = System.getProperties();

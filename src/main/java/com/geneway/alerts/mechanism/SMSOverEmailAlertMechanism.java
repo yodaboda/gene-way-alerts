@@ -13,11 +13,16 @@ import com.geneway.alerts.recipient.AlertRecipient;
  *
  */
 public class SMSOverEmailAlertMechanism extends EmailAlertMechanism {
+	
+	private String phoneNumber;
+	
 	@Inject
 	public SMSOverEmailAlertMechanism(@Named("emailAlertMessage") AlertMessage alertMessage,
 			@Named("emailAlertRecipient") AlertRecipient alertRecipient,
-			@Named("emailLocalizeAlert") AlertLocalization emailLocalizeAlert) {
+			@Named("emailLocalizeAlert") AlertLocalization emailLocalizeAlert,
+			@Named("smsOverEmailPhoneNumber") String phoneNumber) {
 		super(alertMessage, alertRecipient, emailLocalizeAlert);
+		this.phoneNumber = phoneNumber;
 	}
 
 	/**
@@ -26,16 +31,6 @@ public class SMSOverEmailAlertMechanism extends EmailAlertMechanism {
 	 */
 	@Override
 	protected String getSubject(){
-		return this.getAlertRecipient().getRecipient();
-	}
-	
-	/**
-	 * The recipient is a fixed email from which the message are forwarded through SMS
-	 * to the end-user.
-	 * @return A fixed email address
-	 */
-	@Override
-	protected String getRecipient(){
-		return "sms.gene.way@gmail.com";
+		return phoneNumber;
 	}
 }

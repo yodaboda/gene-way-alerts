@@ -8,8 +8,8 @@ public class EmailAlertMessage extends AbstractAlertMessage {
 	}
 
 	@Override
-	public String getBody() {
-		return "body";
+	public String[] getBody() {
+		return new String[]{"body"};
 	}
 
 }
