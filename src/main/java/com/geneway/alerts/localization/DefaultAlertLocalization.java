@@ -17,8 +17,8 @@ public class DefaultAlertLocalization extends AbstractAlertLocalization {
 	}
 
 	@Override
-	public String localizeBody(String body) {
-		return body;
+	public String localizeBody(String... body) {
+		return body[0];
 	}
 
 }
