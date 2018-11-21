@@ -11,14 +11,24 @@ import org.apache.logging.log4j.Logger;
 
 import com.geneway.alerts.mechanism.AlertMechanism;
 
-
+/**
+ * Alerts to be sent to users through email.
+ * @author Firas Swidan
+ *
+ */
 public class EmailAlert implements Alert{
+	/**
+	 * Logger for unexpected events.
+	 */
 	private static final Logger LOGGER = LogManager.getLogger();
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -2307422999927307233L;
 
+	/**
+	 * The mechanism for sending alert reminders.
+	 */
 	private AlertMechanism alertMechanism;
 	
 	@Inject
@@ -26,12 +36,13 @@ public class EmailAlert implements Alert{
 		this.setAlertMechanism(alertMechanism);
 	}
 
+	/**
+	 * Remind user of recommended action.
+	 */
 	@Override
 	public void remind() {
 		try {
 			this.getAlertMechanism().send();
-		} catch (AddressException e) {
-			LOGGER.log(Level.FATAL, e.toString(), e);
 		} catch (MessagingException e) {
 			LOGGER.log(Level.FATAL, e.toString(), e);
 		}

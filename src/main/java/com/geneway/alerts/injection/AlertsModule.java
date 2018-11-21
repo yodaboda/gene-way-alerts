@@ -1,6 +1,5 @@
 package com.geneway.alerts.injection;
 
-import java.util.Locale;
 import java.util.Properties;
 
 import javax.inject.Named;
@@ -11,30 +10,31 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMessage.RecipientType;
 
 import com.geneway.alerts.localization.AlertLocalization;
-import com.geneway.alerts.localization.DefaultAlertLocalization;
-import com.geneway.alerts.mechanism.AlertMechanism;
 import com.geneway.alerts.mechanism.EmailAlertMechanism;
 import com.geneway.alerts.message.AlertMessage;
-import com.geneway.alerts.message.EmailAlertMessage;
 import com.geneway.alerts.recipient.AlertRecipient;
-import com.geneway.alerts.recipient.EmailAlertRecipient;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 
+/**
+ * Guice Module for providing Alerts required parameters. To use this module the following 
+ * classes / interfaces need to be bound:
+ *	<ul> 
+ * 	<li> <code> AlertMechanism </code> </li>
+ *	<li> <code> AlertMessage </code> </li>
+ *	<li> <code> AlertRecipient </code> </li>
+ *	<li> <code> AlertLocalization </code> </li>
+ *	<li> <code> @Named("phoneNumber") String</code> </li>
+ *	<li> <code> Locale </code> </li>
+ *  </ul>
+ * @author Firas Swidan
+ *
+ */
 public class AlertsModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
-//		bind(AlertMechanism.class).to(EmailAlertMechanism.class);
-//		bind(AlertMessage.class).to(EmailAlertMessage.class);
-//		bind(AlertRecipient.class).to(EmailAlertRecipient.class);
-//		bind(AlertLocalization.class).to(DefaultAlertLocalization.class);
 	}
-	
-//	@Provides
-//	public Locale provideLocale(){
-//		return Locale.ENGLISH;
-//	}
 	
 	@Provides
 	public EmailAlertMechanism provideEmailAlertMechanism(Session session, 
