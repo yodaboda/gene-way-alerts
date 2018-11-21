@@ -20,16 +20,15 @@ import com.geneway.alerts.recipient.AlertRecipient;
 import com.geneway.alerts.recipient.EmailAlertRecipient;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import com.google.inject.name.Names;
 
 public class AlertsModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
-		bind(AlertMechanism.class).annotatedWith(Names.named("emailAlertMechanism")).to(EmailAlertMechanism.class);
-		bind(AlertMessage.class).annotatedWith(Names.named("emailAlertMessage")).to(EmailAlertMessage.class);
-		bind(AlertRecipient.class).annotatedWith(Names.named("emailAlertRecipient")).to(EmailAlertRecipient.class);
-		bind(AlertLocalization.class).annotatedWith(Names.named("emailAlertLocalization")).to(DefaultAlertLocalization.class);
+		bind(AlertMechanism.class).to(EmailAlertMechanism.class);
+		bind(AlertMessage.class).to(EmailAlertMessage.class);
+		bind(AlertRecipient.class).to(EmailAlertRecipient.class);
+		bind(AlertLocalization.class).to(DefaultAlertLocalization.class);
 	}
 	
 	@Provides
@@ -38,7 +37,6 @@ public class AlertsModule extends AbstractModule {
 	}
 	
 	@Provides
-	@Named("EmailAlertMechanism")
 	public EmailAlertMechanism provideEmailAlertMechanism(Session session, 
 															MimeMessage mimeMessage){
 		return new EmailAlertMechanism(session, mimeMessage);
@@ -96,21 +94,21 @@ public class AlertsModule extends AbstractModule {
 	
 	@Provides
 	@Named("emailAlertMechanismSubject")
-	public String provideSubject(@Named("emailAlertMechanism") AlertLocalization alertLocalization, 
-									@Named("emailAlertMessage") AlertMessage alertMessage){
+	public String provideSubject(AlertLocalization alertLocalization, 
+								 AlertMessage alertMessage){
 		return alertLocalization.localizeSubject(alertMessage.getSubject());
 	}
 	
 	@Provides
 	@Named("emailAlertMechanismRecipient")
-	public String provideRecipient(@Named("emailAlertRecipient") AlertRecipient alertRecipient){
+	public String provideRecipient(AlertRecipient alertRecipient){
 		return alertRecipient.getRecipient();
 	}
 	
 	@Provides
 	@Named("emailAlertMechanismBody")
-	public String provideBody(@Named("emailAlertLocalization") AlertLocalization alertLocalization, 
-								@Named("emailAlertMessage") AlertMessage alertMessage){
+	public String provideBody(AlertLocalization alertLocalization, 
+							  AlertMessage alertMessage){
 		return alertLocalization.localizeBody(alertMessage.getBody());		
 	}
 }
