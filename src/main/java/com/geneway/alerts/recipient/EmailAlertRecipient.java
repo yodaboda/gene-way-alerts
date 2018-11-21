@@ -1,9 +1,12 @@
 package com.geneway.alerts.recipient;
 
-public class EmailAlertRecipient extends AbstractAlertRecipient {
+import javax.inject.Inject;
+
+public class EmailAlertRecipient implements AlertRecipient {
 
 	private String email;
 	
+	@Inject
 	public EmailAlertRecipient(String email) {
 		this.email = email;
 	}

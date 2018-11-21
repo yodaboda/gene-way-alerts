@@ -1,6 +1,6 @@
 package com.geneway.alerts.message;
 
-public class EmailAlertMessage extends AbstractAlertMessage {
+public class EmailAlertMessage implements AlertMessage {
 
 	@Override
 	public String getSubject() {

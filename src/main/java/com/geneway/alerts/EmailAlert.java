@@ -10,19 +10,20 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.geneway.alerts.mechanism.AlertMechanism;
-import com.geneway.alerts.message.AbstractEmailMessage;
 
 
-public class EmailAlert extends AbstractAlert {
+public class EmailAlert implements Alert{
 	private static final Logger LOGGER = LogManager.getLogger();
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -2307422999927307233L;
 
+	private AlertMechanism alertMechanism;
+	
 	@Inject
 	public EmailAlert(@Named("emailAlertMechanism") AlertMechanism alertMechanism) {
-		super(alertMechanism);
+		this.setAlertMechanism(alertMechanism);
 	}
 
 	@Override
@@ -34,5 +35,13 @@ public class EmailAlert extends AbstractAlert {
 		} catch (MessagingException e) {
 			LOGGER.log(Level.FATAL, e.toString(), e);
 		}
+	}
+
+	private AlertMechanism getAlertMechanism() {
+		return alertMechanism;
+	}
+
+	private void setAlertMechanism(AlertMechanism alertMechanism) {
+		this.alertMechanism = alertMechanism;
 	}
 }
