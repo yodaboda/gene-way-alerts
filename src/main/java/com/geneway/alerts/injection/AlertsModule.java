@@ -25,16 +25,16 @@ public class AlertsModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
-		bind(AlertMechanism.class).to(EmailAlertMechanism.class);
-		bind(AlertMessage.class).to(EmailAlertMessage.class);
-		bind(AlertRecipient.class).to(EmailAlertRecipient.class);
-		bind(AlertLocalization.class).to(DefaultAlertLocalization.class);
+//		bind(AlertMechanism.class).to(EmailAlertMechanism.class);
+//		bind(AlertMessage.class).to(EmailAlertMessage.class);
+//		bind(AlertRecipient.class).to(EmailAlertRecipient.class);
+//		bind(AlertLocalization.class).to(DefaultAlertLocalization.class);
 	}
 	
-	@Provides
-	public Locale provideLocale(){
-		return Locale.ENGLISH;
-	}
+//	@Provides
+//	public Locale provideLocale(){
+//		return Locale.ENGLISH;
+//	}
 	
 	@Provides
 	public EmailAlertMechanism provideEmailAlertMechanism(Session session, 
@@ -71,7 +71,6 @@ public class AlertsModule extends AbstractModule {
 
 		return generateMailMessage;
 	}
-	
 	
 	@Provides
 	public Session provideSession(Properties mailServerProperties){
