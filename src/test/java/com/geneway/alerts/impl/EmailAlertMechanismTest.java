@@ -1,4 +1,4 @@
-package com.geneway.alerts.mechanism;
+package com.geneway.alerts.impl;
 
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;

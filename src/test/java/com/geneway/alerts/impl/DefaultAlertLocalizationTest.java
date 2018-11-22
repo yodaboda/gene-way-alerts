@@ -1,4 +1,4 @@
-package com.geneway.alerts.localization;
+package com.geneway.alerts.impl;
 
 import static org.junit.Assert.*;
 

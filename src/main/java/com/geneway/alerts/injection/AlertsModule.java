@@ -36,18 +36,33 @@ import com.google.inject.Provides;
 public class AlertsModule extends AbstractModule {
 
 	/**
-	 * The binding of this module are done in the provides methods.
+	 * The binding of this module are done in the provides methods below.
 	 */
 	@Override
 	protected void configure() {
 	}
 	
+	/**
+	 * Provides an <code> AlertMechanism </code> for sending reminders through email
+	 * @param session The <code> Session </code> used for sending the email
+	 * @param mimeMessage The content of the email
+	 * @return An instantiated <code> AlertMechaism </code>.
+	 */
 	@Provides
 	public AlertMechanism provideEmailAlertMechanism(Session session, 
-															MimeMessage mimeMessage){
+													MimeMessage mimeMessage){
 		return new EmailAlertMechanism(session, mimeMessage);
 	}
-	
+
+	/**
+	 * Provides an <code> AlertMechanism </code> for sending reminders through SMS over
+	 * email. This mechanism sends a specifically formated email to a specific address that
+	 * is then forwarded to an SMS message.
+	 * @param session The <code> Session </code> used for sending the email that is
+	 *  then converted into an SMS
+	 * @param mimeMessage The content of the email
+	 * @return An instantiated <code> AlertMechaism </code> for sending SMSs.
+	 */
 	@Provides
 	@Named("SMSOverEmailAlertMechanism")
 	public AlertMechanism provideSMSOverEmailAlertMechanism(Session session,
@@ -55,6 +70,10 @@ public class AlertsModule extends AbstractModule {
 		return new EmailAlertMechanism(session, mimeMessage);
 	}
 	
+	/**
+	 * Provides properties of the email
+	 * @return An instantiated <code> Properties </code> with the required email settings.
+	 */
 	@Provides
 	public Properties provideProperties(){
 		Properties mailServerProperties = System.getProperties();
@@ -64,6 +83,18 @@ public class AlertsModule extends AbstractModule {
 		return mailServerProperties;
 	}
 	
+	/**
+	 * Provides the <code> MimeMessage </code> content of the email that is
+	 * to be forwarded to an SMS.
+	 * @param getMailSession The <code> Session </code> used for sending the email
+	 * @param body The body of the email
+	 * @param phoneNumber The SMS phone number
+	 * @return An instantiated <code> MimeMessage </code> associated with the 
+	 * given <code> Session </code> and based on the given <code> body </code> and 
+	 * <code> phoneNumber </code>
+	 * @throws MessagingException In case the instantiation of the <code> MimeMessage </code>
+	 * went wrong.
+	 */
 	@Provides
 	@Named("SMSOverEmailMime")
 	MimeMessage provideSMSOverEmailMimeMessage(Session getMailSession, 
@@ -78,11 +109,27 @@ public class AlertsModule extends AbstractModule {
 		return generateMailMessage;
 	}
 	
+	/**
+	 * Provides a <code> Session </code> based on the given properties.
+	 * @param mailServerProperties The properties of the email <code> Session </code>
+	 * @return A <code> Session </code> based on the given email <code> Properties </code>
+	 */
 	@Provides
 	Session provideSession(Properties mailServerProperties){
 		return Session.getDefaultInstance(mailServerProperties, null);
 	}
 	
+	/**
+	 * Provides a <code> MimeMessage </code> of the email reminder.
+	 * @param getMailSession The <code> Session </code> used for sending the email
+	 * @param recipient The address of the email recipient.
+	 * @param subject The email subject
+	 * @param body the email body
+	 * @return An instantiated <code> MimeMessage </code> associated with the given
+	 * <code> Session </code> based on the given recipient, subject, and body.
+	 * @throws MessagingException In case the instantiation of the <code> MimeMessage </code>
+	 * went wrong.
+	 */
 	@Provides
 	MimeMessage provideMimeMessage(Session getMailSession, 
 										@Named("emailAlertMechanismRecipient") String recipient,
@@ -97,6 +144,12 @@ public class AlertsModule extends AbstractModule {
 		return generateMailMessage;
 	}
 	
+	/**
+	 * Provides the subject of the alert
+	 * @param alertLocalization The form used for localizing the subject
+	 * @param alertMessage The message containing the subject
+	 * @return A localized subject
+	 */
 	@Provides
 	@Named("emailAlertMechanismSubject")
 	String provideSubject(AlertLocalization alertLocalization, 
@@ -104,12 +157,23 @@ public class AlertsModule extends AbstractModule {
 		return alertLocalization.localizeSubject(alertMessage.getSubject());
 	}
 	
+	/**
+	 * Provides the recipient address of the alert.
+	 * @param alertRecipient The recipient of the alert.
+	 * @return The recipient address to send the alert to.
+	 */
 	@Provides
 	@Named("emailAlertMechanismRecipient")
 	String provideRecipient(AlertRecipient alertRecipient){
 		return alertRecipient.getRecipient();
 	}
 	
+	/**
+	 * Provides the body of the alert.
+	 * @param alertLocalization The form used for localizing the body
+	 * @param alertMessage The message containing the body
+	 * @return A localized body
+	 */
 	@Provides
 	@Named("emailAlertMechanismBody")
 	String provideBody(AlertLocalization alertLocalization, 
