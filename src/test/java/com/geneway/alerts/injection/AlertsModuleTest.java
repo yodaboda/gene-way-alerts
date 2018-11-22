@@ -23,11 +23,11 @@ import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import com.geneway.alerts.localization.AlertLocalization;
-import com.geneway.alerts.mechanism.AlertMechanism;
-import com.geneway.alerts.mechanism.EmailAlertMechanism;
-import com.geneway.alerts.message.AlertMessage;
-import com.geneway.alerts.recipient.AlertRecipient;
+import com.geneway.alerts.AlertLocalization;
+import com.geneway.alerts.AlertMechanism;
+import com.geneway.alerts.AlertMessage;
+import com.geneway.alerts.AlertRecipient;
+import com.geneway.alerts.impl.EmailAlertMechanism;
 import com.google.inject.Guice;
 import com.google.inject.testing.fieldbinder.Bind;
 import com.google.inject.testing.fieldbinder.BoundFieldModule;

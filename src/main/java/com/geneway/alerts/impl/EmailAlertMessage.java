@@ -1,4 +1,6 @@
-package com.geneway.alerts.message;
+package com.geneway.alerts.impl;
+
+import com.geneway.alerts.AlertMessage;
 
 public class EmailAlertMessage implements AlertMessage {
 

@@ -16,6 +16,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import com.geneway.alerts.impl.EmailAlertMechanism;
+
 public class EmailAlertMechanismTest {  
 	
 	@Rule

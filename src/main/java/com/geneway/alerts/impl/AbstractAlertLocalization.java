@@ -1,6 +1,8 @@
-package com.geneway.alerts.localization;
+package com.geneway.alerts.impl;
 
 import java.util.Locale;
+
+import com.geneway.alerts.AlertLocalization;
 
 public abstract class AbstractAlertLocalization implements AlertLocalization {
 	private Locale locale;

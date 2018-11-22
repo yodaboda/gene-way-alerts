@@ -1,4 +1,4 @@
-package com.geneway.alerts.localization;
+package com.geneway.alerts;
 
 public interface AlertLocalization {
 	public String localizeSubject(String subject);

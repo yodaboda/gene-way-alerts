@@ -1,4 +1,4 @@
-package com.geneway.alerts.message;
+package com.geneway.alerts;
 
 public interface AlertMessage {
 	public String getSubject();

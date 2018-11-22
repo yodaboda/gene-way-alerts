@@ -1,6 +1,8 @@
-package com.geneway.alerts.recipient;
+package com.geneway.alerts.impl;
 
 import javax.inject.Inject;
+
+import com.geneway.alerts.AlertRecipient;
 
 public class EmailAlertRecipient implements AlertRecipient {
 

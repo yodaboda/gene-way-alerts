@@ -1,4 +1,4 @@
-package com.geneway.alerts.mechanism;
+package com.geneway.alerts;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;

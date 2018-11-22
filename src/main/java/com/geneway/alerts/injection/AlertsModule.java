@@ -9,43 +9,49 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMessage.RecipientType;
 
-import com.geneway.alerts.localization.AlertLocalization;
-import com.geneway.alerts.mechanism.EmailAlertMechanism;
-import com.geneway.alerts.message.AlertMessage;
-import com.geneway.alerts.recipient.AlertRecipient;
+import com.geneway.alerts.AlertLocalization;
+import com.geneway.alerts.AlertMechanism;
+import com.geneway.alerts.AlertMessage;
+import com.geneway.alerts.AlertRecipient;
+import com.geneway.alerts.impl.EmailAlertMechanism;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 
 /**
- * Guice Module for providing Alerts required parameters. To use this module the following 
- * classes / interfaces need to be bound:
+ * Guice Module for providing AlertMechanism. To use this module the following 
+ * classes / interfaces need to be bound to an implementation:
  *	<ul> 
- * 	<li> <code> AlertMechanism </code> </li>
  *	<li> <code> AlertMessage </code> </li>
  *	<li> <code> AlertRecipient </code> </li>
  *	<li> <code> AlertLocalization </code> </li>
  *	<li> <code> @Named("phoneNumber") String</code> </li>
  *	<li> <code> Locale </code> </li>
  *  </ul>
+ *  
+ *  Then it is possible to inject <code> AlertMecanism </code> or 
+ *  <code> @Named("SMSOverEmailAlertMechanism") AlertMechanism </code>
  * @author Firas Swidan
  *
  */
 public class AlertsModule extends AbstractModule {
 
+	/**
+	 * The binding of this module are done in the provides methods.
+	 */
 	@Override
 	protected void configure() {
 	}
 	
 	@Provides
-	public EmailAlertMechanism provideEmailAlertMechanism(Session session, 
+	public AlertMechanism provideEmailAlertMechanism(Session session, 
 															MimeMessage mimeMessage){
 		return new EmailAlertMechanism(session, mimeMessage);
 	}
 	
 	@Provides
 	@Named("SMSOverEmailAlertMechanism")
-	public EmailAlertMechanism provideSMSOverEmailAlertMechanism(Session session,
-																@Named("SMSOverEmailMime") MimeMessage mimeMessage){
+	public AlertMechanism provideSMSOverEmailAlertMechanism(Session session,
+															@Named("SMSOverEmailMime") MimeMessage mimeMessage){
 		return new EmailAlertMechanism(session, mimeMessage);
 	}
 	
@@ -60,7 +66,7 @@ public class AlertsModule extends AbstractModule {
 	
 	@Provides
 	@Named("SMSOverEmailMime")
-	public MimeMessage provideSMSOverEmailMimeMessage(Session getMailSession, 
+	MimeMessage provideSMSOverEmailMimeMessage(Session getMailSession, 
 										@Named("emailAlertMechanismBody") String body,
 										@Named("phoneNumber") String phoneNumber) 
 												throws MessagingException{
@@ -73,12 +79,12 @@ public class AlertsModule extends AbstractModule {
 	}
 	
 	@Provides
-	public Session provideSession(Properties mailServerProperties){
+	Session provideSession(Properties mailServerProperties){
 		return Session.getDefaultInstance(mailServerProperties, null);
 	}
 	
 	@Provides
-	public MimeMessage provideMimeMessage(Session getMailSession, 
+	MimeMessage provideMimeMessage(Session getMailSession, 
 										@Named("emailAlertMechanismRecipient") String recipient,
 										@Named("emailAlertMechanismSubject") String subject, 
 										@Named("emailAlertMechanismBody") String body) 
@@ -93,20 +99,20 @@ public class AlertsModule extends AbstractModule {
 	
 	@Provides
 	@Named("emailAlertMechanismSubject")
-	public String provideSubject(AlertLocalization alertLocalization, 
+	String provideSubject(AlertLocalization alertLocalization, 
 								 AlertMessage alertMessage){
 		return alertLocalization.localizeSubject(alertMessage.getSubject());
 	}
 	
 	@Provides
 	@Named("emailAlertMechanismRecipient")
-	public String provideRecipient(AlertRecipient alertRecipient){
+	String provideRecipient(AlertRecipient alertRecipient){
 		return alertRecipient.getRecipient();
 	}
 	
 	@Provides
 	@Named("emailAlertMechanismBody")
-	public String provideBody(AlertLocalization alertLocalization, 
+	String provideBody(AlertLocalization alertLocalization, 
 							  AlertMessage alertMessage){
 		return alertLocalization.localizeBody(alertMessage.getBody());		
 	}

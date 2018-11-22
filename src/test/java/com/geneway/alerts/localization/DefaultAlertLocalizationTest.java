@@ -6,6 +6,8 @@ import java.util.Locale;
 
 import org.junit.Test;
 
+import com.geneway.alerts.impl.DefaultAlertLocalization;
+
 public class DefaultAlertLocalizationTest {
 
 	@Test

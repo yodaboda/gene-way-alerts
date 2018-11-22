@@ -1,9 +1,11 @@
-package com.geneway.alerts.mechanism;
+package com.geneway.alerts.impl;
 
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.MimeMessage;
+
+import com.geneway.alerts.AlertMechanism;
 
 public class EmailAlertMechanism implements AlertMechanism{
 
