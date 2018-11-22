@@ -19,7 +19,7 @@ import com.google.inject.Provides;
 
 /**
  * Guice Module for providing AlertMechanism. To use this module the following 
- * classes / interfaces need to be bound to an implementation:
+ * classes / interfaces need to be provided:
  *	<ul> 
  *	<li> <code> AlertMessage </code> </li>
  *	<li> <code> AlertRecipient </code> </li>
