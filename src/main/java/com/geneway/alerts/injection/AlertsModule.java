@@ -4,7 +4,9 @@ import java.util.Properties;
 
 import javax.inject.Named;
 import javax.mail.MessagingException;
+import javax.mail.NoSuchProviderException;
 import javax.mail.Session;
+import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMessage.RecipientType;
@@ -25,6 +27,8 @@ import com.google.inject.Provides;
  *	<li> <code> AlertRecipient </code> </li>
  *	<li> <code> AlertLocalization </code> </li>
  *	<li> <code> @Named("phoneNumber") String</code> </li>
+ * 	<li> <code> @Named("senderEmailAddress") String </code> </li>
+ *	<li> <code> @Named("senderEmailPassword") String </code> </li>
  *	<li> <code> Locale </code> </li>
  *  </ul>
  *  
@@ -44,30 +48,41 @@ public class AlertsModule extends AbstractModule {
 	
 	/**
 	 * Provides an <code> AlertMechanism </code> for sending reminders through email
-	 * @param session The <code> Session </code> used for sending the email
+	 * @param transport The <code> Transport </code> used for sending the email
 	 * @param mimeMessage The content of the email
 	 * @return An instantiated <code> AlertMechaism </code>.
 	 */
 	@Provides
-	public AlertMechanism provideEmailAlertMechanism(Session session, 
-													MimeMessage mimeMessage){
-		return new EmailAlertMechanism(session, mimeMessage);
+	public AlertMechanism provideEmailAlertMechanism(Transport transport, 
+													MimeMessage mimeMessage,
+													@Named("senderEmailAddress") String emailAddress,
+													@Named("senderEmailPassword") String emailPassword){
+		return new EmailAlertMechanism(transport, mimeMessage, emailAddress, emailPassword);
 	}
 
 	/**
 	 * Provides an <code> AlertMechanism </code> for sending reminders through SMS over
 	 * email. This mechanism sends a specifically formated email to a specific address that
 	 * is then forwarded to an SMS message.
-	 * @param session The <code> Session </code> used for sending the email that is
+	 * @param transport The <code> Transport </code> used for sending the email that is
 	 *  then converted into an SMS
 	 * @param mimeMessage The content of the email
 	 * @return An instantiated <code> AlertMechaism </code> for sending SMSs.
 	 */
 	@Provides
 	@Named("SMSOverEmailAlertMechanism")
-	public AlertMechanism provideSMSOverEmailAlertMechanism(Session session,
-															@Named("SMSOverEmailMime") MimeMessage mimeMessage){
-		return new EmailAlertMechanism(session, mimeMessage);
+	public AlertMechanism provideSMSOverEmailAlertMechanism(Transport transport,
+															@Named("SMSOverEmailMime") MimeMessage mimeMessage,
+															@Named("senderEmailAddress") String emailAddress,
+															@Named("senderEmailPassword") String emailPassword){
+		return new EmailAlertMechanism(transport, mimeMessage, emailAddress, emailPassword);
+	}
+	
+	@Provides
+	protected Transport providesTransport(Session session) 
+													throws MessagingException{
+		Transport transport = session.getTransport("smtp");
+		return transport;
 	}
 	
 	/**
@@ -75,7 +90,7 @@ public class AlertsModule extends AbstractModule {
 	 * @return An instantiated <code> Properties </code> with the required email settings.
 	 */
 	@Provides
-	public Properties provideProperties(){
+	protected Properties provideProperties(){
 		Properties mailServerProperties = System.getProperties();
 		mailServerProperties.put("mail.smtp.port", "587");
 		mailServerProperties.put("mail.smtp.auth", "true");
@@ -97,7 +112,7 @@ public class AlertsModule extends AbstractModule {
 	 */
 	@Provides
 	@Named("SMSOverEmailMime")
-	MimeMessage provideSMSOverEmailMimeMessage(Session getMailSession, 
+	protected MimeMessage provideSMSOverEmailMimeMessage(Session getMailSession, 
 										@Named("emailAlertMechanismBody") String body,
 										@Named("phoneNumber") String phoneNumber) 
 												throws MessagingException{
@@ -115,7 +130,7 @@ public class AlertsModule extends AbstractModule {
 	 * @return A <code> Session </code> based on the given email <code> Properties </code>
 	 */
 	@Provides
-	Session provideSession(Properties mailServerProperties){
+	protected Session provideSession(Properties mailServerProperties){
 		return Session.getDefaultInstance(mailServerProperties, null);
 	}
 	
@@ -131,7 +146,7 @@ public class AlertsModule extends AbstractModule {
 	 * went wrong.
 	 */
 	@Provides
-	MimeMessage provideMimeMessage(Session getMailSession, 
+	protected MimeMessage provideMimeMessage(Session getMailSession, 
 										@Named("emailAlertMechanismRecipient") String recipient,
 										@Named("emailAlertMechanismSubject") String subject, 
 										@Named("emailAlertMechanismBody") String body) 
@@ -152,7 +167,7 @@ public class AlertsModule extends AbstractModule {
 	 */
 	@Provides
 	@Named("emailAlertMechanismSubject")
-	String provideSubject(AlertLocalization alertLocalization, 
+	protected String provideSubject(AlertLocalization alertLocalization, 
 								 AlertMessage alertMessage){
 		return alertLocalization.localizeSubject(alertMessage.getSubject());
 	}
@@ -164,7 +179,7 @@ public class AlertsModule extends AbstractModule {
 	 */
 	@Provides
 	@Named("emailAlertMechanismRecipient")
-	String provideRecipient(AlertRecipient alertRecipient){
+	protected String provideRecipient(AlertRecipient alertRecipient){
 		return alertRecipient.getRecipient();
 	}
 	
@@ -176,7 +191,7 @@ public class AlertsModule extends AbstractModule {
 	 */
 	@Provides
 	@Named("emailAlertMechanismBody")
-	String provideBody(AlertLocalization alertLocalization, 
+	protected String provideBody(AlertLocalization alertLocalization, 
 							  AlertMessage alertMessage){
 		return alertLocalization.localizeBody(alertMessage.getBody());		
 	}

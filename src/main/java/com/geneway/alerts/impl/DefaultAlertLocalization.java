@@ -4,9 +4,13 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+/**
+ * Default localization implementation that does nothing.
+ * @author Firas Swidan
+ *
+ */
 public class DefaultAlertLocalization extends AbstractAlertLocalization {
 
-	@Inject
 	public DefaultAlertLocalization(Locale locale) {
 		super(locale);
 	}
