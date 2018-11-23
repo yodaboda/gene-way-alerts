@@ -15,10 +15,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import com.geneway.alerts.AlertSender;
+
 public class EmailAlertMechanismTest {  
 	
-	private static final String SENDER_EMAIL_PASSWORD = "r8B0iR7M";
-	private static final String SENDER_EMAIL_ADDRESS = "sms.gene.way@gmail.com";
 	@Rule
     public ExpectedException thrown= ExpectedException.none();
 	
@@ -26,37 +26,39 @@ public class EmailAlertMechanismTest {
 	public void testSend() throws MessagingException {
 		Transport mockedTransport = mock(Transport.class);
 		MimeMessage mockedMimeMessage = mock(MimeMessage.class);
+		AlertSender emailAlertSender = new DefaultEmailAlertSender();
 		EmailAlertMechanism alertMechanism = new EmailAlertMechanism(mockedTransport, 
 																	mockedMimeMessage,
-																	SENDER_EMAIL_ADDRESS,
-																	SENDER_EMAIL_PASSWORD);
+																	emailAlertSender);
 		
 		
 		Address[] addresses = new Address[1];
 		
 		when(mockedMimeMessage.getAllRecipients()).thenReturn(addresses);
-		doNothing().when(mockedTransport).connect("smtp.gmail.com", SENDER_EMAIL_ADDRESS,
-				SENDER_EMAIL_PASSWORD);
+		doNothing().when(mockedTransport).connect(emailAlertSender.getHost(), 
+													emailAlertSender.getUserName(),
+													emailAlertSender.getPassword());
 		doNothing().when(mockedTransport).sendMessage(mockedMimeMessage, addresses);
 		doNothing().when(mockedTransport).close();
 		
-		alertMechanism.send();
+		alertMechanism.send();		
 	}
 
 	@Test
 	public void testSendException() throws MessagingException {
 		Transport mockedTransport = mock(Transport.class);
 		MimeMessage mockedMimeMessage = mock(MimeMessage.class);
+		AlertSender emailAlertSender = new DefaultEmailAlertSender();
 		EmailAlertMechanism alertMechanism = new EmailAlertMechanism(mockedTransport, 
 																	mockedMimeMessage,
-																	SENDER_EMAIL_ADDRESS,
-																	SENDER_EMAIL_PASSWORD);
+																	emailAlertSender);
 		
 		Address[] addresses = new Address[1];
 		
 		doReturn(addresses).when(mockedMimeMessage).getAllRecipients();
-		doNothing().when(mockedTransport).connect("smtp.gmail.com", SENDER_EMAIL_ADDRESS,
-				SENDER_EMAIL_PASSWORD);
+		doNothing().when(mockedTransport).connect(emailAlertSender.getHost(), 
+													emailAlertSender.getUserName(),
+													emailAlertSender.getPassword());
 		doNothing().when(mockedTransport).sendMessage(mockedMimeMessage, addresses);
 		doThrow(new MessagingException("cannot close")).when(mockedTransport).close();
 		

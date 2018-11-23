@@ -15,6 +15,7 @@ import com.geneway.alerts.AlertLocalization;
 import com.geneway.alerts.AlertMechanism;
 import com.geneway.alerts.AlertMessage;
 import com.geneway.alerts.AlertRecipient;
+import com.geneway.alerts.AlertSender;
 import com.geneway.alerts.impl.EmailAlertMechanism;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -27,8 +28,7 @@ import com.google.inject.Provides;
  *	<li> <code> AlertRecipient </code> </li>
  *	<li> <code> AlertLocalization </code> </li>
  *	<li> <code> @Named("phoneNumber") String</code> </li>
- * 	<li> <code> @Named("senderEmailAddress") String </code> </li>
- *	<li> <code> @Named("senderEmailPassword") String </code> </li>
+ * 	<li> <code> EmailAlertSender </code> </li>
  *	<li> <code> Locale </code> </li>
  *  </ul>
  *  
@@ -55,9 +55,8 @@ public class AlertsModule extends AbstractModule {
 	@Provides
 	public AlertMechanism provideEmailAlertMechanism(Transport transport, 
 													MimeMessage mimeMessage,
-													@Named("senderEmailAddress") String emailAddress,
-													@Named("senderEmailPassword") String emailPassword){
-		return new EmailAlertMechanism(transport, mimeMessage, emailAddress, emailPassword);
+													AlertSender emailAlertSender){
+		return new EmailAlertMechanism(transport, mimeMessage, emailAlertSender);
 	}
 
 	/**
@@ -73,16 +72,14 @@ public class AlertsModule extends AbstractModule {
 	@Named("SMSOverEmailAlertMechanism")
 	public AlertMechanism provideSMSOverEmailAlertMechanism(Transport transport,
 															@Named("SMSOverEmailMime") MimeMessage mimeMessage,
-															@Named("senderEmailAddress") String emailAddress,
-															@Named("senderEmailPassword") String emailPassword){
-		return new EmailAlertMechanism(transport, mimeMessage, emailAddress, emailPassword);
+															AlertSender emailAlertSender){
+		return new EmailAlertMechanism(transport, mimeMessage, emailAlertSender);
 	}
 	
 	@Provides
 	protected Transport providesTransport(Session session) 
 													throws MessagingException{
-		Transport transport = session.getTransport("smtp");
-		return transport;
+		return session.getTransport("smtp");
 	}
 	
 	/**

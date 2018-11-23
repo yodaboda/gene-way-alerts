@@ -7,6 +7,7 @@ import javax.mail.Transport;
 import javax.mail.internet.MimeMessage;
 
 import com.geneway.alerts.AlertMechanism;
+import com.geneway.alerts.AlertSender;
 
 /**
  * Sends alerts through email.
@@ -17,8 +18,7 @@ public class EmailAlertMechanism implements AlertMechanism{
 
 	private Transport transport;
 	private MimeMessage generateMailMessage;
-	private String senderEmailAddress;
-	private String senderEmailPassword;
+	private AlertSender emailAlertSender;
 	
 	/**
 	 * Constructs an <code> EmailAlertMechanism </code> from the given <code> Transport </code>
@@ -28,11 +28,10 @@ public class EmailAlertMechanism implements AlertMechanism{
 	 */
 	@Inject
 	public EmailAlertMechanism(Transport transport, MimeMessage mimeMessage,
-								String senderEmailAddress, String senderEmailPassword){
+								AlertSender emailAlertSender){
 		this.transport = transport;
 		this.generateMailMessage = mimeMessage;
-		this.senderEmailAddress = senderEmailAddress;
-		this.senderEmailPassword = senderEmailPassword;
+		this.emailAlertSender = emailAlertSender;
 	}
 
 	/**
@@ -42,7 +41,8 @@ public class EmailAlertMechanism implements AlertMechanism{
 	 */
 	@Override
 	public void send() throws MessagingException {
-		transport.connect("smtp.gmail.com", senderEmailAddress, senderEmailPassword);
+		transport.connect(emailAlertSender.getHost(), emailAlertSender.getUserName(), 
+							emailAlertSender.getPassword());
 		transport.sendMessage(generateMailMessage, generateMailMessage.getAllRecipients());
 		transport.close();
 

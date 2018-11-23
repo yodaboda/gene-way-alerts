@@ -1,8 +1,12 @@
 package com.geneway.alerts.injection;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.*;
 
+import java.io.IOException;
 import java.util.Locale;
 import java.util.Properties;
 
@@ -28,7 +32,7 @@ import com.geneway.alerts.AlertLocalization;
 import com.geneway.alerts.AlertMechanism;
 import com.geneway.alerts.AlertMessage;
 import com.geneway.alerts.AlertRecipient;
-import com.geneway.alerts.impl.EmailAlertMechanism;
+import com.geneway.alerts.AlertSender;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Provides;
@@ -36,20 +40,21 @@ import com.google.inject.testing.fieldbinder.Bind;
 import com.google.inject.testing.fieldbinder.BoundFieldModule;
 import com.google.inject.util.Modules;
 import com.icegreen.greenmail.util.GreenMail;
-import com.icegreen.greenmail.util.ServerSetup;
+import com.icegreen.greenmail.util.ServerSetupTest;
 
 public class AlertsModuleTest {
 
 	@Rule
     public ExpectedException thrown= ExpectedException.none();
 	
-	private final String RECIPIENT = "recipient";
+	private final String RECIPIENT = "recipient@localhost.com";
 	private final String SUBJECT = "subject";
 	private final String BODY = "body";
 
-	private final int MAIL_SERVER_PORT = 3024;
-	private final ServerSetup SMTP = new ServerSetup(MAIL_SERVER_PORT, null, ServerSetup.PROTOCOL_SMTP);
-	private final GreenMail mailServer = new GreenMail(SMTP);
+	private static final String LOCALHOST = "127.0.0.1";
+	private static final String USER_NAME = "alertsUser";
+	private static final String USER_EMAIL = USER_NAME + "@localhost";
+	private final GreenMail mailServer = new GreenMail(ServerSetupTest.SMTP);
 
 	
 	@Bind @Mock AlertMessage mockedAlertMessage;
@@ -57,8 +62,7 @@ public class AlertsModuleTest {
 	@Bind @Mock AlertLocalization mockedAlertLocalization;
 	@Bind @Named("phoneNumber") String phoneNumber = "24";
 	@Bind Locale locale = Locale.forLanguageTag("ar");
-	@Bind @Named("senderEmailAddress") String emailAddress = "example.email@gmail.com";
-	@Bind @Named("senderEmailPassword") String emailPassword = "123456";
+	@Bind AlertSender mockedEmailAlertSender;
 	
 	@Inject AlertMechanism emailAlertMechanism;
 	@Inject @Named("SMSOverEmailAlertMechanism") AlertMechanism smsOverEmailAlertMechanism;
@@ -75,7 +79,9 @@ public class AlertsModuleTest {
 		@Provides
 		protected Properties provideProperties(){
 			 Properties mailSessionProperties = new Properties();
-			 mailSessionProperties.put("mail.smtp.port", String.valueOf(mailServer.getSmtp().getPort()));
+		     mailSessionProperties.put("mail.smtp.host", LOCALHOST);
+		     mailSessionProperties.put("mail.smtp.auth", "true");
+			 mailSessionProperties.put("mail.smtp.port", ServerSetupTest.SMTP.getPort());
 			 return mailSessionProperties;
 		}
 
@@ -94,9 +100,16 @@ public class AlertsModuleTest {
 		 when(mockedAlertMessage.getSubject()).thenReturn(SUBJECT);
 		 when(mockedAlertLocalization.localizeSubject(SUBJECT)).thenReturn("subject");
 		 when(mockedAlertLocalization.localizeBody(bodyStrings)).thenReturn("body");
+		 doReturn(USER_NAME).when(mockedEmailAlertSender).getUserName();
+		 doReturn("123456").when(mockedEmailAlertSender).getPassword();
+		 doReturn(LOCALHOST).when(mockedEmailAlertSender).getHost();
+		 doReturn(USER_EMAIL).when(mockedEmailAlertSender).getEmail();
 
-		 SMTP.setServerStartupTimeout(2400);
+//		 SMTP.setServerStartupTimeout(2400);
 		 mailServer.start();
+		 mailServer.setUser(mockedEmailAlertSender.getHost(), 
+				 			mockedEmailAlertSender.getUserName(), 
+				 			mockedEmailAlertSender.getPassword());
 		 
 		 Guice.createInjector(Modules.override(new AlertsModule()).with(new TestAlertsModule()), 
 				 				BoundFieldModule.of(this)).injectMembers(this);
@@ -108,15 +121,29 @@ public class AlertsModuleTest {
 	 }
 	 
 	@Test
-	public void testProvideEmailAlertMechanism() throws MessagingException {
-		thrown.expect(MessagingException.class);
+	public void testProvideEmailAlertMechanism() throws MessagingException, IOException {
 		emailAlertMechanism.send();
+        
+        MimeMessage[] messages = mailServer.getReceivedMessages();
+        assertNotNull(messages);
+        assertEquals(1, messages.length);
+        MimeMessage m = messages[0];
+        assertEquals(subject, m.getSubject());
+        assertTrue(String.valueOf(m.getContent()).contains(body));
+        assertEquals(recipient, m.getAllRecipients()[0].toString());
 	}
 
 	@Test
-	public void testProvideSMSOverEmailAlertMechanism() throws MessagingException {
-		thrown.expect(MessagingException.class);
+	public void testProvideSMSOverEmailAlertMechanism() throws MessagingException, IOException {
 		smsOverEmailAlertMechanism.send();
+
+        MimeMessage[] messages = mailServer.getReceivedMessages();
+        assertNotNull(messages);
+        assertEquals(1, messages.length);
+        MimeMessage m = messages[0];
+        assertEquals(phoneNumber, m.getSubject());
+        assertTrue(String.valueOf(m.getContent()).contains(body));
+        assertEquals(recipient, m.getAllRecipients()[0].toString());
 	}
 
 	@Test
@@ -125,9 +152,9 @@ public class AlertsModuleTest {
 	}
 	@Test
 	public void testProvideProperties() {
-		assertEquals(String.valueOf(MAIL_SERVER_PORT), properties.get("mail.smtp.port"));
-//		assertEquals("true", properties.get("mail.smtp.auth"));
-//		assertEquals("true", properties.get("mail.smtp.starttls.enable"));
+		assertEquals(ServerSetupTest.SMTP.getPort(), properties.get("mail.smtp.port"));
+		assertEquals("true", properties.get("mail.smtp.auth"));
+		assertEquals(LOCALHOST, properties.get("mail.smtp.host"));
 	}
 
 	@Test
