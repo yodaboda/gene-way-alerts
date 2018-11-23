@@ -8,5 +8,9 @@ import javax.mail.MessagingException;
  *
  */
 public interface AlertMechanism {
+	/**
+	 * Send the alert.
+	 * @throws MessagingException In case of communication issues.
+	 */
 	public void send() throws MessagingException;
 }

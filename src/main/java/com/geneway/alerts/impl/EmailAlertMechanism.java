@@ -23,8 +23,9 @@ public class EmailAlertMechanism implements AlertMechanism{
 	/**
 	 * Constructs an <code> EmailAlertMechanism </code> from the given <code> Transport </code>
 	 * and <code> MimeMessage </code>
-	 * @param session The email session
+	 * @param transport For sending the email
 	 * @param mimeMessage The message content and specifications
+	 * @param emailAlertSender The details of the alert sender
 	 */
 	@Inject
 	public EmailAlertMechanism(Transport transport, MimeMessage mimeMessage,
@@ -37,7 +38,7 @@ public class EmailAlertMechanism implements AlertMechanism{
 	/**
 	 * Sends an email alert from a pre-defined email account
 	 * based on the specification receives in the constructor.
-	 * @throws A <code> MessagingException </code> in case the alert send was not successful.
+	 * @throws MessagingException in case the alert send was not successful.
 	 */
 	@Override
 	public void send() throws MessagingException {
