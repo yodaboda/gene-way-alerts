@@ -12,23 +12,22 @@ public class DefaultAlertLocalizationTest {
 
 	@Test
 	public void testLocalizeSubject() {
-		DefaultAlertLocalization alertLocalization = new DefaultAlertLocalization(Locale.getDefault());
-		String subject = "subject";
-		assertEquals(subject, alertLocalization.localizeSubject(subject));
-	}
-
-	@Test
-	public void testLocalizeSubjectNullLocale() {
-		DefaultAlertLocalization alertLocalization = new DefaultAlertLocalization(null);
+		DefaultAlertLocalization alertLocalization = new DefaultAlertLocalization();
 		String subject = "subject";
 		assertEquals(subject, alertLocalization.localizeSubject(subject));
 	}
 
 	@Test
 	public void testLocalizeBody() {
-		DefaultAlertLocalization alertLocalization = new DefaultAlertLocalization(Locale.forLanguageTag("ar"));
+		DefaultAlertLocalization alertLocalization = new DefaultAlertLocalization();
 		String body = "body";
 		assertEquals(body, alertLocalization.localizeSubject(body));
+	}
+
+	@Test
+	public void testGetLocale() {
+		DefaultAlertLocalization alertLocalization = new DefaultAlertLocalization();
+		assertEquals(Locale.ENGLISH, alertLocalization.getLocale());
 	}
 
 }

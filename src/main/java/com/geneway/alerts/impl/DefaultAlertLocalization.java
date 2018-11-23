@@ -4,16 +4,14 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import com.geneway.alerts.AlertLocalization;
+
 /**
  * Default localization implementation that does nothing.
  * @author Firas Swidan
  *
  */
-public class DefaultAlertLocalization extends AbstractAlertLocalization {
-
-	public DefaultAlertLocalization(Locale locale) {
-		super(locale);
-	}
+public class DefaultAlertLocalization implements AlertLocalization {
 
 	@Override
 	public String localizeSubject(String subject) {
@@ -23,6 +21,11 @@ public class DefaultAlertLocalization extends AbstractAlertLocalization {
 	@Override
 	public String localizeBody(String... body) {
 		return body[0];
+	}
+
+	@Override
+	public Locale getLocale() {
+		return Locale.ENGLISH;
 	}
 
 }

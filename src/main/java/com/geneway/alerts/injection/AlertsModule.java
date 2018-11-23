@@ -28,8 +28,7 @@ import com.google.inject.Provides;
  *	<li> <code> AlertRecipient </code> </li>
  *	<li> <code> AlertLocalization </code> </li>
  *	<li> <code> @Named("phoneNumber") String</code> </li>
- * 	<li> <code> EmailAlertSender </code> </li>
- *	<li> <code> Locale </code> </li>
+ * 	<li> <code> AlertSender </code> </li>
  *  </ul>
  *  
  *  Then it is possible to inject <code> AlertMecanism </code> or 
@@ -38,6 +37,8 @@ import com.google.inject.Provides;
  *
  */
 public class AlertsModule extends AbstractModule {
+
+	static final String SMS_RECIPIENT_EMAIL_ADDRESS = "sms.gene.way@gmail.com";
 
 	/**
 	 * The binding of this module are done in the provides methods below.
@@ -114,7 +115,7 @@ public class AlertsModule extends AbstractModule {
 										@Named("phoneNumber") String phoneNumber) 
 												throws MessagingException{
 		MimeMessage generateMailMessage = new MimeMessage(getMailSession);
-		generateMailMessage.addRecipient(RecipientType.TO, new InternetAddress("sms.gene.way@gmail.com"));
+		generateMailMessage.addRecipient(RecipientType.TO, new InternetAddress(SMS_RECIPIENT_EMAIL_ADDRESS));
 		generateMailMessage.setSubject(phoneNumber);
 		generateMailMessage.setText(body);
 

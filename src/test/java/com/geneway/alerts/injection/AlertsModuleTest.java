@@ -61,8 +61,7 @@ public class AlertsModuleTest {
 	@Bind @Mock AlertRecipient mockedAlertRecipient;
 	@Bind @Mock AlertLocalization mockedAlertLocalization;
 	@Bind @Named("phoneNumber") String phoneNumber = "24";
-	@Bind Locale locale = Locale.forLanguageTag("ar");
-	@Bind AlertSender mockedEmailAlertSender;
+	@Bind @Mock AlertSender mockedEmailAlertSender;
 	
 	@Inject AlertMechanism emailAlertMechanism;
 	@Inject @Named("SMSOverEmailAlertMechanism") AlertMechanism smsOverEmailAlertMechanism;
@@ -100,12 +99,12 @@ public class AlertsModuleTest {
 		 when(mockedAlertMessage.getSubject()).thenReturn(SUBJECT);
 		 when(mockedAlertLocalization.localizeSubject(SUBJECT)).thenReturn("subject");
 		 when(mockedAlertLocalization.localizeBody(bodyStrings)).thenReturn("body");
+		 when(mockedAlertLocalization.getLocale()).thenReturn(Locale.forLanguageTag("ar"));
 		 doReturn(USER_NAME).when(mockedEmailAlertSender).getUserName();
 		 doReturn("123456").when(mockedEmailAlertSender).getPassword();
 		 doReturn(LOCALHOST).when(mockedEmailAlertSender).getHost();
 		 doReturn(USER_EMAIL).when(mockedEmailAlertSender).getEmail();
 
-//		 SMTP.setServerStartupTimeout(2400);
 		 mailServer.start();
 		 mailServer.setUser(mockedEmailAlertSender.getHost(), 
 				 			mockedEmailAlertSender.getUserName(), 
@@ -143,7 +142,8 @@ public class AlertsModuleTest {
         MimeMessage m = messages[0];
         assertEquals(phoneNumber, m.getSubject());
         assertTrue(String.valueOf(m.getContent()).contains(body));
-        assertEquals(recipient, m.getAllRecipients()[0].toString());
+        assertEquals(AlertsModule.SMS_RECIPIENT_EMAIL_ADDRESS, 
+        				m.getAllRecipients()[0].toString());
 	}
 
 	@Test
