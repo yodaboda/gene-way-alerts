@@ -8,6 +8,8 @@
     <packagedElement xmi:type="uml:Interface" xmi:id="_FNuBQO40Eei8-cQ97UkNAw" name="AlertLocalization"/>
     <packagedElement xmi:type="uml:Interface" xmi:id="_LjpBgO40Eei8-cQ97UkNAw" name="AlertRecipient"/>
     <packagedElement xmi:type="uml:Interface" xmi:id="_JL8xYO40Eei8-cQ97UkNAw" name="AlertMechanism"/>
+    <packagedElement xmi:type="uml:Interface" xmi:id="_SMYf8O8MEei8-cQ97UkNAw" name="AlertSender"/>
+    <packagedElement xmi:type="uml:Dependency" xmi:id="_WYLK8O8MEei8-cQ97UkNAw" name="Bind" client="_SMYf8O8MEei8-cQ97UkNAw" supplier="_Z5r6AO40Eei8-cQ97UkNAw"/>
   </packagedElement>
   <packagedElement xmi:type="uml:Package" xmi:id="_Z5r6AO40Eei8-cQ97UkNAw" name="com.geneway.alerts.injection">
     <packagedElement xmi:type="uml:Dependency" xmi:id="_soFdYO41Eei8-cQ97UkNAw" name="Provides" client="_Z5r6AO40Eei8-cQ97UkNAw" supplier="_JL8xYO40Eei8-cQ97UkNAw"/>
@@ -17,9 +19,8 @@
   <packagedElement xmi:type="uml:Dependency" xmi:id="_mL0kkO41Eei8-cQ97UkNAw" name="Bind" client="_LjpBgO40Eei8-cQ97UkNAw" supplier="_Z5r6AO40Eei8-cQ97UkNAw"/>
   <packagedElement xmi:type="uml:Dependency" xmi:id="_nnnNIO41Eei8-cQ97UkNAw" name="Bind" client="_KgBBUO40Eei8-cQ97UkNAw" supplier="_Z5r6AO40Eei8-cQ97UkNAw"/>
   <packagedElement xmi:type="uml:Package" xmi:id="_7kKbIO41Eei8-cQ97UkNAw" name="com.geneway.alerts.impl">
-    <packagedElement xmi:type="uml:Class" xmi:id="_B7xdcO42Eei8-cQ97UkNAw" name="AbstractAlertLocalization"/>
     <packagedElement xmi:type="uml:Class" xmi:id="_DVJrMO42Eei8-cQ97UkNAw" name="DefaultAlertLocalization">
-      <generalization xmi:type="uml:Generalization" xmi:id="_YnHM8O42Eei8-cQ97UkNAw" general="_B7xdcO42Eei8-cQ97UkNAw"/>
+      <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_fK16cO8MEei8-cQ97UkNAw" client="_DVJrMO42Eei8-cQ97UkNAw" supplier="_FNuBQO40Eei8-cQ97UkNAw" contract="_FNuBQO40Eei8-cQ97UkNAw"/>
     </packagedElement>
     <packagedElement xmi:type="uml:Class" xmi:id="_FfAToO42Eei8-cQ97UkNAw" name="EmailAlertMechanism"/>
     <packagedElement xmi:type="uml:Class" xmi:id="_GgrMAO42Eei8-cQ97UkNAw" name="EmailAlertMessage"/>
@@ -27,6 +28,9 @@
     <packagedElement xmi:type="uml:Realization" xmi:id="_SdEFgO42Eei8-cQ97UkNAw" client="_FfAToO42Eei8-cQ97UkNAw" supplier="_JL8xYO40Eei8-cQ97UkNAw"/>
     <packagedElement xmi:type="uml:Realization" xmi:id="_TI_-cO42Eei8-cQ97UkNAw" client="_GgrMAO42Eei8-cQ97UkNAw" supplier="_KgBBUO40Eei8-cQ97UkNAw"/>
     <packagedElement xmi:type="uml:Realization" xmi:id="_TnDMYO42Eei8-cQ97UkNAw" client="_Hmrx0O42Eei8-cQ97UkNAw" supplier="_LjpBgO40Eei8-cQ97UkNAw"/>
-    <packagedElement xmi:type="uml:Realization" xmi:id="_UHV2AO42Eei8-cQ97UkNAw" client="_B7xdcO42Eei8-cQ97UkNAw" supplier="_FNuBQO40Eei8-cQ97UkNAw"/>
+    <packagedElement xmi:type="uml:Class" xmi:id="_j6ti4O8MEei8-cQ97UkNAw" name="DefaultAlertSender">
+      <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_nGNOgO8MEei8-cQ97UkNAw" client="_j6ti4O8MEei8-cQ97UkNAw" supplier="_SMYf8O8MEei8-cQ97UkNAw" contract="_SMYf8O8MEei8-cQ97UkNAw"/>
+    </packagedElement>
   </packagedElement>
+  <packagedElement xmi:type="uml:Component" xmi:id="_0asooO42Eei8-cQ97UkNAw" name="Alerts"/>
 </uml:Model>

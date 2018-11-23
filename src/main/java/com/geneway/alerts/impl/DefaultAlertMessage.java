@@ -2,7 +2,12 @@ package com.geneway.alerts.impl;
 
 import com.geneway.alerts.AlertMessage;
 
-public class EmailAlertMessage implements AlertMessage {
+/**
+ * The default content of the alert message
+ * @author Firas Swidan
+ *
+ */
+public class DefaultAlertMessage implements AlertMessage {
 
 	@Override
 	public String getSubject() {

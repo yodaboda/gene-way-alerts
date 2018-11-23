@@ -2,7 +2,11 @@ package com.geneway.alerts.impl;
 
 import com.geneway.alerts.AlertSender;
 
-
+/**
+ * Default alert sender implementation
+ * @author Firas Swidan
+ *
+ */
 public class DefaultEmailAlertSender implements AlertSender {
 
 	public static final String PASSWORD = "r8B0iR7M";

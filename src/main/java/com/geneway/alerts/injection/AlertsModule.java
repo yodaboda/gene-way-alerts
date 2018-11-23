@@ -51,6 +51,7 @@ public class AlertsModule extends AbstractModule {
 	 * Provides an <code> AlertMechanism </code> for sending reminders through email
 	 * @param transport The <code> Transport </code> used for sending the email
 	 * @param mimeMessage The content of the email
+	 * @param emailAlertSender Details of the alert sender
 	 * @return An instantiated <code> AlertMechaism </code>.
 	 */
 	@Provides
@@ -67,6 +68,7 @@ public class AlertsModule extends AbstractModule {
 	 * @param transport The <code> Transport </code> used for sending the email that is
 	 *  then converted into an SMS
 	 * @param mimeMessage The content of the email
+	 * @param emailAlertSender Details of the alert sender
 	 * @return An instantiated <code> AlertMechaism </code> for sending SMSs.
 	 */
 	@Provides
