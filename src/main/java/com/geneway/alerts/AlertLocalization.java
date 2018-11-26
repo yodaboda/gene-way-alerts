@@ -2,6 +2,7 @@ package com.geneway.alerts;
 
 import java.util.Locale;
 
+
 /**
  * Provides localization of message body and subjects.
  * @author Firas Swidan
