@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 gradle sonarqube
 GRADLE_RESULT=$?
