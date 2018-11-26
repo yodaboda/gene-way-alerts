@@ -1,12 +1,10 @@
 package com.geneway.alerts.impl;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.Locale;
 
 import org.junit.Test;
-
-import com.geneway.alerts.impl.DefaultAlertLocalization;
 
 public class DefaultAlertLocalizationTest {
 

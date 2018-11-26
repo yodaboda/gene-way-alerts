@@ -2,8 +2,6 @@ package com.geneway.alerts.impl;
 
 import java.util.Locale;
 
-import javax.inject.Inject;
-
 import com.geneway.alerts.AlertLocalization;
 
 /**

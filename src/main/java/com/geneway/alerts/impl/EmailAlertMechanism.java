@@ -2,7 +2,6 @@ package com.geneway.alerts.impl;
 
 import javax.inject.Inject;
 import javax.mail.MessagingException;
-import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.MimeMessage;
 
@@ -47,6 +46,10 @@ public class EmailAlertMechanism implements AlertMechanism{
 		transport.sendMessage(generateMailMessage, generateMailMessage.getAllRecipients());
 		transport.close();
 
+	}
+	
+	public MimeMessage getMimeMessage(){
+		return generateMailMessage;
 	}
 
 }

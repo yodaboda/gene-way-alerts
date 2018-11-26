@@ -4,7 +4,6 @@ import java.util.Properties;
 
 import javax.inject.Named;
 import javax.mail.MessagingException;
-import javax.mail.NoSuchProviderException;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
@@ -41,10 +40,11 @@ public class AlertsModule extends AbstractModule {
 	static final String SMS_RECIPIENT_EMAIL_ADDRESS = "sms.gene.way@gmail.com";
 
 	/**
-	 * The binding of this module are done in the provides methods below.
+	 * Configuring the bindings of the Alerts module
 	 */
 	@Override
 	protected void configure() {
+		// The bindings of this module are done in the providers methods below
 	}
 	
 	/**
