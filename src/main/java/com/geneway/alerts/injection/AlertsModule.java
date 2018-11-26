@@ -35,6 +35,7 @@ import com.google.inject.Provides;
  * @author Firas Swidan
  *
  */
+
 public class AlertsModule extends AbstractModule {
 
 	static final String SMS_RECIPIENT_EMAIL_ADDRESS = "sms.gene.way@gmail.com";

@@ -3,6 +3,7 @@
 red='\033[0;31m'
 green='\033[0;32m'
 yellow='\033[0;33m'
+blue='\033[0;34m'
 no_color='\033[0m'
 
 echo -e "\n${yellow}Executing pre-commit hook${no_color}\n"
@@ -14,7 +15,14 @@ echo `pwd`
 #git stash save -q --keep-index $STASH_NAME
 
 scripts/run_tests.sh
-RESULT=$?
+TEST_RESULT=$?
+echo -e "\n${blue}Test result:$TEST_RESULT${no_color}\n"
+
+scripts/run_sonar.sh
+SONAR_RESULT=$?
+echo -e "\n${blue}Sonar result:$SONAR_RESULT${no_color}\n"
+
+RESULT=$((TEST_RESULT + SONAR_RESULT))
 
 #STASHES=$(git stash list)
 #if [[ $STASHES == "$STASH_NAME" ]]; then
