@@ -15,23 +15,17 @@ import com.geneway.alerts.AlertMechanism;
 import com.geneway.alerts.AlertMessage;
 import com.geneway.alerts.AlertRecipient;
 import com.geneway.alerts.AlertSender;
+import com.geneway.alerts.AlertSpecification;
+import com.geneway.alerts.AlertType;
 import com.geneway.alerts.impl.EmailAlertMechanism;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 
 /**
- * Guice Module for providing AlertMechanism. To use this module the following 
- * classes / interfaces need to be provided:
- *	<ul> 
- *	<li> <code> AlertMessage </code> </li>
- *	<li> <code> AlertRecipient </code> </li>
- *	<li> <code> AlertLocalization </code> </li>
- *	<li> <code> @Named("phoneNumber") String</code> </li>
- * 	<li> <code> AlertSender </code> </li>
- *  </ul>
+ * Guice Module for providing AlertMechanism. This module depends on being provided
+ * with an <code> AlertSpecification </code>.
  *  
- *  Then it is possible to inject <code> AlertMecanism </code> or 
- *  <code> @Named("SMSOverEmailAlertMechanism") AlertMechanism </code>
+ *  Then it is possible to inject <code> AlertMecanism </code>.
  * @author Firas Swidan
  *
  */
@@ -52,33 +46,16 @@ public class AlertsModule extends AbstractModule {
 	 * Provides an <code> AlertMechanism </code> for sending reminders through email
 	 * @param transport The <code> Transport </code> used for sending the email
 	 * @param mimeMessage The content of the email
-	 * @param emailAlertSender Details of the alert sender
+	 * @param alertSpecification Details of the alert
 	 * @return An instantiated <code> AlertMechaism </code>.
 	 */
 	@Provides
-	public AlertMechanism provideEmailAlertMechanism(Transport transport, 
+	public AlertMechanism provideAlertMechanism(Transport transport, 
 													MimeMessage mimeMessage,
-													AlertSender emailAlertSender){
-		return new EmailAlertMechanism(transport, mimeMessage, emailAlertSender);
+													AlertSpecification alertSpecification){
+		return new EmailAlertMechanism(transport, mimeMessage, alertSpecification.getAlertSender());
 	}
 
-	/**
-	 * Provides an <code> AlertMechanism </code> for sending reminders through SMS over
-	 * email. This mechanism sends a specifically formated email to a specific address that
-	 * is then forwarded to an SMS message.
-	 * @param transport The <code> Transport </code> used for sending the email that is
-	 *  then converted into an SMS
-	 * @param mimeMessage The content of the email
-	 * @param emailAlertSender Details of the alert sender
-	 * @return An instantiated <code> AlertMechaism </code> for sending SMSs.
-	 */
-	@Provides
-	@Named("SMSOverEmailAlertMechanism")
-	public AlertMechanism provideSMSOverEmailAlertMechanism(Transport transport,
-															@Named("SMSOverEmailMime") MimeMessage mimeMessage,
-															AlertSender emailAlertSender){
-		return new EmailAlertMechanism(transport, mimeMessage, emailAlertSender);
-	}
 	
 	@Provides
 	protected Transport providesTransport(Session session) 
@@ -99,31 +76,6 @@ public class AlertsModule extends AbstractModule {
 		return mailServerProperties;
 	}
 	
-	/**
-	 * Provides the <code> MimeMessage </code> content of the email that is
-	 * to be forwarded to an SMS.
-	 * @param getMailSession The <code> Session </code> used for sending the email
-	 * @param body The body of the email
-	 * @param phoneNumber The SMS phone number
-	 * @return An instantiated <code> MimeMessage </code> associated with the 
-	 * given <code> Session </code> and based on the given <code> body </code> and 
-	 * <code> phoneNumber </code>
-	 * @throws MessagingException In case the instantiation of the <code> MimeMessage </code>
-	 * went wrong.
-	 */
-	@Provides
-	@Named("SMSOverEmailMime")
-	protected MimeMessage provideSMSOverEmailMimeMessage(Session getMailSession, 
-										@Named("emailAlertMechanismBody") String body,
-										@Named("phoneNumber") String phoneNumber) 
-												throws MessagingException{
-		MimeMessage generateMailMessage = new MimeMessage(getMailSession);
-		generateMailMessage.addRecipient(RecipientType.TO, new InternetAddress(SMS_RECIPIENT_EMAIL_ADDRESS));
-		generateMailMessage.setSubject(phoneNumber);
-		generateMailMessage.setText(body);
-
-		return generateMailMessage;
-	}
 	
 	/**
 	 * Provides a <code> Session </code> based on the given properties.
@@ -138,19 +90,19 @@ public class AlertsModule extends AbstractModule {
 	/**
 	 * Provides a <code> MimeMessage </code> of the email reminder.
 	 * @param getMailSession The <code> Session </code> used for sending the email
-	 * @param recipient The address of the email recipient.
-	 * @param subject The email subject
-	 * @param body the email body
+	 * @param recipient The recipient of the email.
+	 * @param subject The email subject.
+	 * @param body the email body.
 	 * @return An instantiated <code> MimeMessage </code> associated with the given
-	 * <code> Session </code> based on the given recipient, subject, and body.
+	 * <code> Session </code> based on the given alertSpecification, subject, and body.
 	 * @throws MessagingException In case the instantiation of the <code> MimeMessage </code>
 	 * went wrong.
 	 */
 	@Provides
 	protected MimeMessage provideMimeMessage(Session getMailSession, 
-										@Named("emailAlertMechanismRecipient") String recipient,
-										@Named("emailAlertMechanismSubject") String subject, 
-										@Named("emailAlertMechanismBody") String body) 
+											@Named("alertRecipient") String recipient,
+											@Named("alertMechanismSubject") String subject, 
+											@Named("alertMechanismBody") String body) 
 												throws MessagingException{
 		MimeMessage generateMailMessage = new MimeMessage(getMailSession);
 		generateMailMessage.addRecipient(RecipientType.TO, new InternetAddress(recipient));
@@ -159,41 +111,46 @@ public class AlertsModule extends AbstractModule {
 
 		return generateMailMessage;
 	}
-	
+
+	/**
+	 * Provides the recipient of the alert.
+	 * @param alertSpecification Details of the alert
+	 * @return The recipient email is case of <code> AlertType.E_MAIl </code> alert, or
+	 * 			<code> SMS_RECIPIENT_EMAIL_ADDRESS </code> in case of <code> AlertType.SMS </code>.
+	 */
+	@Provides
+	@Named("alertRecipient")
+	protected String provideAlertRecipient(AlertSpecification alertSpecification) {
+		boolean emailAlert = alertSpecification.getAlertRecipient().getAlertType() == AlertType.E_MAIl;
+		return emailAlert ? alertSpecification.getAlertRecipient().getRecipient() :
+										SMS_RECIPIENT_EMAIL_ADDRESS;
+		
+	}
 	/**
 	 * Provides the subject of the alert
-	 * @param alertLocalization The form used for localizing the subject
-	 * @param alertMessage The message containing the subject
-	 * @return A localized subject
+	 * @param alertSpecification Details of the alert
+	 * @return A localized subject in case of <code> AlertType.E_MAIL </code> or the recipient phone
+	 * 			number in case of <code> AlertType.SMS </code>.
 	 */
 	@Provides
-	@Named("emailAlertMechanismSubject")
-	protected String provideSubject(AlertLocalization alertLocalization, 
-								 AlertMessage alertMessage){
-		return alertLocalization.localizeSubject(alertMessage.getSubject());
-	}
-	
-	/**
-	 * Provides the recipient address of the alert.
-	 * @param alertRecipient The recipient of the alert.
-	 * @return The recipient address to send the alert to.
-	 */
-	@Provides
-	@Named("emailAlertMechanismRecipient")
-	protected String provideRecipient(AlertRecipient alertRecipient){
-		return alertRecipient.getRecipient();
+	@Named("alertMechanismSubject")
+	protected String provideSubject(AlertSpecification alertSpecification) {
+		boolean emailAlert = alertSpecification.getAlertRecipient().getAlertType() == AlertType.E_MAIl;
+		if(!emailAlert) {
+			return alertSpecification.getAlertRecipient().getRecipient();
+		}
+
+		return alertSpecification.getAlertLocalization().localizeSubject(alertSpecification.getAlertMessage().getSubject());
 	}
 	
 	/**
 	 * Provides the body of the alert.
-	 * @param alertLocalization The form used for localizing the body
-	 * @param alertMessage The message containing the body
+	 * @param alertSpecification Details of the alert
 	 * @return A localized body
 	 */
 	@Provides
-	@Named("emailAlertMechanismBody")
-	protected String provideBody(AlertLocalization alertLocalization, 
-							  AlertMessage alertMessage){
-		return alertLocalization.localizeBody(alertMessage.getBody());		
+	@Named("alertMechanismBody")
+	protected String provideBody(AlertSpecification alertSpecification){
+		return alertSpecification.getAlertLocalization().localizeBody(alertSpecification.getAlertMessage().getBody());
 	}
 }

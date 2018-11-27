@@ -9,15 +9,19 @@
     <packagedElement xmi:type="uml:Interface" xmi:id="_LjpBgO40Eei8-cQ97UkNAw" name="AlertRecipient"/>
     <packagedElement xmi:type="uml:Interface" xmi:id="_JL8xYO40Eei8-cQ97UkNAw" name="AlertMechanism"/>
     <packagedElement xmi:type="uml:Interface" xmi:id="_SMYf8O8MEei8-cQ97UkNAw" name="AlertSender"/>
-    <packagedElement xmi:type="uml:Dependency" xmi:id="_WYLK8O8MEei8-cQ97UkNAw" name="Bind" client="_SMYf8O8MEei8-cQ97UkNAw" supplier="_Z5r6AO40Eei8-cQ97UkNAw"/>
+    <packagedElement xmi:type="uml:Interface" xmi:id="__7U0EPIkEeigU5iNME2mOA" name="AlertSpecification"/>
+    <packagedElement xmi:type="uml:Enumeration" xmi:id="_DUGtwPIlEeigU5iNME2mOA" name="AlertType"/>
+    <packagedElement xmi:type="uml:Dependency" xmi:id="_NlhTMPIlEeigU5iNME2mOA" client="__7U0EPIkEeigU5iNME2mOA" supplier="_LjpBgO40Eei8-cQ97UkNAw"/>
+    <packagedElement xmi:type="uml:Dependency" xmi:id="_OLYZUPIlEeigU5iNME2mOA" client="__7U0EPIkEeigU5iNME2mOA" supplier="_FNuBQO40Eei8-cQ97UkNAw"/>
+    <packagedElement xmi:type="uml:Dependency" xmi:id="_kZahwPIlEeigU5iNME2mOA" client="__7U0EPIkEeigU5iNME2mOA" supplier="_KgBBUO40Eei8-cQ97UkNAw"/>
+    <packagedElement xmi:type="uml:Dependency" xmi:id="_k6Ov0PIlEeigU5iNME2mOA" client="__7U0EPIkEeigU5iNME2mOA" supplier="_SMYf8O8MEei8-cQ97UkNAw"/>
+    <packagedElement xmi:type="uml:Dependency" xmi:id="_nSIbUPIlEeigU5iNME2mOA" client="_LjpBgO40Eei8-cQ97UkNAw" supplier="_DUGtwPIlEeigU5iNME2mOA"/>
   </packagedElement>
   <packagedElement xmi:type="uml:Package" xmi:id="_Z5r6AO40Eei8-cQ97UkNAw" name="com.geneway.alerts.injection">
     <packagedElement xmi:type="uml:Dependency" xmi:id="_soFdYO41Eei8-cQ97UkNAw" name="Provides" client="_Z5r6AO40Eei8-cQ97UkNAw" supplier="_JL8xYO40Eei8-cQ97UkNAw"/>
     <packagedElement xmi:type="uml:Class" xmi:id="_yU7EYO41Eei8-cQ97UkNAw" name="AlertModule"/>
+    <packagedElement xmi:type="uml:Dependency" xmi:id="_cMzssPIlEeigU5iNME2mOA" name="Bind" client="_Z5r6AO40Eei8-cQ97UkNAw" supplier="__7U0EPIkEeigU5iNME2mOA"/>
   </packagedElement>
-  <packagedElement xmi:type="uml:Dependency" xmi:id="_kee5AO41Eei8-cQ97UkNAw" name="Bind" client="_FNuBQO40Eei8-cQ97UkNAw" supplier="_Z5r6AO40Eei8-cQ97UkNAw"/>
-  <packagedElement xmi:type="uml:Dependency" xmi:id="_mL0kkO41Eei8-cQ97UkNAw" name="Bind" client="_LjpBgO40Eei8-cQ97UkNAw" supplier="_Z5r6AO40Eei8-cQ97UkNAw"/>
-  <packagedElement xmi:type="uml:Dependency" xmi:id="_nnnNIO41Eei8-cQ97UkNAw" name="Bind" client="_KgBBUO40Eei8-cQ97UkNAw" supplier="_Z5r6AO40Eei8-cQ97UkNAw"/>
   <packagedElement xmi:type="uml:Package" xmi:id="_7kKbIO41Eei8-cQ97UkNAw" name="com.geneway.alerts.impl">
     <packagedElement xmi:type="uml:Class" xmi:id="_DVJrMO42Eei8-cQ97UkNAw" name="DefaultAlertLocalization">
       <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_fK16cO8MEei8-cQ97UkNAw" client="_DVJrMO42Eei8-cQ97UkNAw" supplier="_FNuBQO40Eei8-cQ97UkNAw" contract="_FNuBQO40Eei8-cQ97UkNAw"/>
