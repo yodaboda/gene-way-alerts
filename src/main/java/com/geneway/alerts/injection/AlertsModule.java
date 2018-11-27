@@ -39,7 +39,7 @@ public class AlertsModule extends AbstractModule {
 	 */
 	@Override
 	protected void configure() {
-		// The bindings of this module are done in the providers methods below
+		requireBinding(AlertSpecification.class);
 	}
 	
 	/**
