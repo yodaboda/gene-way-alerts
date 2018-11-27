@@ -117,7 +117,7 @@ public class AlertsModule extends AbstractModule {
 	@Provides
 	@Named("alertRecipient")
 	protected String provideAlertRecipient(AlertSpecification alertSpecification) {
-		boolean emailAlert = alertSpecification.getAlertRecipient().getAlertType() == AlertType.E_MAIl;
+		boolean emailAlert = alertSpecification.getAlertRecipient().getAlertType() == AlertType.E_MAIL;
 		return emailAlert ? alertSpecification.getAlertRecipient().getRecipient() :
 										SMS_RECIPIENT_EMAIL_ADDRESS;
 		
@@ -131,7 +131,7 @@ public class AlertsModule extends AbstractModule {
 	@Provides
 	@Named("alertMechanismSubject")
 	protected String provideSubject(AlertSpecification alertSpecification) {
-		boolean emailAlert = alertSpecification.getAlertRecipient().getAlertType() == AlertType.E_MAIl;
+		boolean emailAlert = alertSpecification.getAlertRecipient().getAlertType() == AlertType.E_MAIL;
 		if(!emailAlert) {
 			return alertSpecification.getAlertRecipient().getRecipient();
 		}

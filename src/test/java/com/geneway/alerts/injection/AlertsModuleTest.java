@@ -120,7 +120,7 @@ public class AlertsModuleTest {
 		when(mockedAlertSpecification.getAlertRecipient()).thenReturn(mockedAlertRecipient);
 		when(mockedAlertSpecification.getAlertSender()).thenReturn(mockedAlertSender);
 
-		when(mockedAlertRecipient.getAlertType()).thenReturn(AlertType.E_MAIl);
+		when(mockedAlertRecipient.getAlertType()).thenReturn(AlertType.E_MAIL);
 		when(mockedAlertRecipient.getRecipient()).thenReturn(RECIPIENT_EMAIL);
 		when(mockedAlertMessage.getBody()).thenReturn(bodyStrings);
 		when(mockedAlertMessage.getSubject()).thenReturn(SUBJECT);
@@ -148,7 +148,7 @@ public class AlertsModuleTest {
 	}
 	
 	private void setUpEmailAlert() {
-		when(mockedAlertRecipient.getAlertType()).thenReturn(AlertType.E_MAIl);
+		when(mockedAlertRecipient.getAlertType()).thenReturn(AlertType.E_MAIL);
 		when(mockedAlertRecipient.getRecipient()).thenReturn(RECIPIENT_EMAIL);
 
 		setUpInjection();

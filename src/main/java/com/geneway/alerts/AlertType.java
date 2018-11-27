@@ -1,5 +1,5 @@
 package com.geneway.alerts;
 
 public enum AlertType {
-	E_MAIl, SMS
+	E_MAIL, SMS
 }
