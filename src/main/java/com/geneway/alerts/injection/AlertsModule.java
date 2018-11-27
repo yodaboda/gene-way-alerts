@@ -10,11 +10,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMessage.RecipientType;
 
-import com.geneway.alerts.AlertLocalization;
 import com.geneway.alerts.AlertMechanism;
-import com.geneway.alerts.AlertMessage;
-import com.geneway.alerts.AlertRecipient;
-import com.geneway.alerts.AlertSender;
 import com.geneway.alerts.AlertSpecification;
 import com.geneway.alerts.AlertType;
 import com.geneway.alerts.impl.EmailAlertMechanism;
