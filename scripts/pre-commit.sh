@@ -14,7 +14,6 @@ echo `pwd`
 #STASH_NAME="pre-commit-$(date +%s)"
 #git stash save -q --keep-index $STASH_NAME
 
-
 scripts/run_tests.sh
 TEST_RESULT=$?
 echo -e "\n${blue}Test result:$TEST_RESULT${no_color}\n"
