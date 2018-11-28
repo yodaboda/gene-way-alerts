@@ -10,7 +10,6 @@ echo -e "\n${yellow}Executing pre-commit hook${no_color}\n"
 
 echo `pwd`
 
-
 #STASH_NAME="pre-commit-$(date +%s)"
 #git stash save -q --keep-index $STASH_NAME
 
