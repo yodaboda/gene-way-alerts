@@ -9,7 +9,6 @@ import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.util.Locale;
-import java.util.Properties;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -36,14 +35,11 @@ import com.geneway.alerts.AlertRecipient;
 import com.geneway.alerts.AlertSender;
 import com.geneway.alerts.AlertSpecification;
 import com.geneway.alerts.AlertType;
-import com.google.inject.AbstractModule;
+import com.geneway.alerts.injection.testing.TestAlertsModule;
 import com.google.inject.Guice;
-import com.google.inject.Provides;
 import com.google.inject.testing.fieldbinder.Bind;
 import com.google.inject.testing.fieldbinder.BoundFieldModule;
 import com.google.inject.util.Modules;
-import com.icegreen.greenmail.util.GreenMail;
-import com.icegreen.greenmail.util.ServerSetupTest;
 
 public class AlertsModuleTest {
 
@@ -56,10 +52,9 @@ public class AlertsModuleTest {
 	private final String SUBJECT = "subject";
 	private final String BODY = "body";
 
-	private static final String LOCALHOST = "127.0.0.1";
 	private static final String USER_NAME = "alertsUser";
 	private static final String USER_EMAIL = USER_NAME + "@localhost";
-	private final GreenMail mailServer = new GreenMail(ServerSetupTest.SMTP);
+	
 
 	@Bind
 	@Mock
@@ -77,8 +72,6 @@ public class AlertsModuleTest {
 	@Inject
 	AlertMechanism emailAlertMechanism;
 	@Inject
-	Properties properties;
-	@Inject
 	MimeMessage mimeMessage;
 	@Inject
 	Session session;
@@ -93,22 +86,6 @@ public class AlertsModuleTest {
 	@Inject
 	@Named("alertRecipient")
 	String recipient;
-
-	public class TestAlertsModule extends AbstractModule {
-		@Provides
-		protected Properties provideProperties() {
-			Properties mailSessionProperties = new Properties();
-			mailSessionProperties.put("mail.smtp.host", LOCALHOST);
-			mailSessionProperties.put("mail.smtp.auth", "true");
-			mailSessionProperties.put("mail.smtp.port", ServerSetupTest.SMTP.getPort());
-			return mailSessionProperties;
-		}
-
-		@Override
-		protected void configure() {
-
-		}
-	}
 
 	@Before
 	public void setUp() {
@@ -129,17 +106,18 @@ public class AlertsModuleTest {
 		when(mockedAlertLocalization.getLocale()).thenReturn(Locale.forLanguageTag("ar"));
 		doReturn(USER_NAME).when(mockedAlertSender).getUserName();
 		doReturn("123456").when(mockedAlertSender).getPassword();
-		doReturn(LOCALHOST).when(mockedAlertSender).getHost();
+		doReturn(TestAlertsModule.LOCALHOST).when(mockedAlertSender).getHost();
 		doReturn(USER_EMAIL).when(mockedAlertSender).getEmail();
 
-		mailServer.start();
-		mailServer.setUser(mockedAlertSender.getHost(), mockedAlertSender.getUserName(),
-				mockedAlertSender.getPassword());
+		TestAlertsModule.MAIL_SERVER.start();
+		TestAlertsModule.MAIL_SERVER.setUser(mockedAlertSender.getHost(), 
+											mockedAlertSender.getUserName(),
+											mockedAlertSender.getPassword());
 	}
 
 	@After
 	public void tearDown() {
-		mailServer.stop();
+		TestAlertsModule.MAIL_SERVER.stop();
 	}
 
 	private void setUpInjection() {
@@ -168,7 +146,7 @@ public class AlertsModuleTest {
 
 		emailAlertMechanism.send();
 
-		MimeMessage[] messages = mailServer.getReceivedMessages();
+		MimeMessage[] messages = TestAlertsModule.MAIL_SERVER.getReceivedMessages();
 		assertNotNull(messages);
 		assertEquals(1, messages.length);
 		MimeMessage m = messages[0];
@@ -183,7 +161,7 @@ public class AlertsModuleTest {
 
 		emailAlertMechanism.send();
 
-		MimeMessage[] messages = mailServer.getReceivedMessages();
+		MimeMessage[] messages = TestAlertsModule.MAIL_SERVER.getReceivedMessages();
 		assertNotNull(messages);
 		assertEquals(1, messages.length);
 		MimeMessage m = messages[0];
@@ -198,15 +176,6 @@ public class AlertsModuleTest {
 		setUpInjection();
 
 		assertEquals("smtp:", transport.getURLName().toString());
-	}
-
-	@Test
-	public void testProvideProperties() {
-		setUpInjection();
-
-		assertEquals(ServerSetupTest.SMTP.getPort(), properties.get("mail.smtp.port"));
-		assertEquals("true", properties.get("mail.smtp.auth"));
-		assertEquals(LOCALHOST, properties.get("mail.smtp.host"));
 	}
 
 	@Test
@@ -226,7 +195,8 @@ public class AlertsModuleTest {
 	public void testProvideSession() {
 		setUpInjection();
 
-		assertEquals(properties, session.getProperties());
+		assertEquals(TestAlertsModule.LOCALHOST, 
+					session.getProperties().getProperty("mail.smtp.host"));
 	}
 
 	@Test

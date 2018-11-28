@@ -29,28 +29,21 @@ repositories {
 }
 
 dependencies {
-    compile 'org.apache.commons:commons-lang3:3.8.1'
-	compile 'org.apache.logging.log4j:log4j-api:2.11.1'
-	compile 'org.apache.logging.log4j:log4j-core:2.11.1'
-	compile 'com.cybozu.labs:langdetect:1.1-20120112'
-	compile 'com.google.inject:guice:4.1.0'
-	compile 'javax.mail:mail:1.4.7'
+    implementation 'org.apache.commons:commons-lang3:3.8.1'
+	implementation 'org.apache.logging.log4j:log4j-api:2.11.1'
+	implementation 'org.apache.logging.log4j:log4j-core:2.11.1'
+	implementation 'com.cybozu.labs:langdetect:1.1-20120112'
+	implementation 'com.google.inject:guice:4.1.0'
+	implementation 'javax.mail:mail:1.4.7'
 	
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:2.23.0'
-	testCompile 'org.apache.logging.log4j:log4j-core:2.11.1:tests'
-	testCompile 'com.google.inject.extensions:guice-testlib:4.1.0'
-	testCompile 'com.icegreen:greenmail:1.5.8';
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-core:2.23.0'
+	testImplementation 'org.apache.logging.log4j:log4j-core:2.11.1:tests'
+	testImplementation 'com.google.inject.extensions:guice-testlib:4.1.0'
+	testImplementation 'com.icegreen:greenmail:1.5.8'
+	testImplementation fileTree(dir: '../../git/repository/gene-way-alerts-testing/build/libs', include: ['*.jar'])
 }
 
 test {
     systemProperties 'property': 'value'
-}
-
-uploadArchives {
-    repositories {
-       flatDir {
-           dirs 'repos'
-       }
-    }
 }
