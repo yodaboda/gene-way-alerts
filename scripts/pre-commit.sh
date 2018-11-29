@@ -10,6 +10,24 @@ echo -e "\n${yellow}Executing pre-commit hook${no_color}\n"
 
 echo `pwd`
 
+# The following code dealing with stashing was adapted from:
+# https://stackoverflow.com/questions/20479794/how-do-i-properly-git-stash-pop-in-pre-commit-hooks-to-get-a-clean-working-tree
+# First, stash index and work dir, keeping only the
+# to-be-committed changes in the working directory.
+old_stash=$(git rev-parse -q --verify refs/stash)
+git stash save -q --keep-index
+new_stash=$(git rev-parse -q --verify refs/stash)
+
+# If there were no changes (e.g., `--amend` or `--allow-empty`)
+# then nothing was stashed, and we should skip everything,
+# including the tests themselves.  (Presumably the tests passed
+# on the previous commit, so there is no need to re-run them.)
+if [ "$old_stash" = "$new_stash" ]; then
+    echo "pre-commit script: no changes to test"
+    sleep 1 # XXX hack, editor may erase message
+    exit 0
+fi
+
 #STASH_NAME="pre-commit-$(date +%s)"
 #git stash save -q --keep-index $STASH_NAME
 
@@ -22,6 +40,9 @@ SONAR_RESULT=$?
 echo -e "\n${blue}Sonar result:$SONAR_RESULT${no_color}\n"
 
 RESULT=$((TEST_RESULT + SONAR_RESULT))
+
+# Restore changes
+git reset --hard -q && git stash apply --index -q && git stash drop -q
 
 #STASHES=$(git stash list)
 #if [[ $STASHES == "$STASH_NAME" ]]; then
