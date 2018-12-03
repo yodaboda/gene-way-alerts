@@ -5,27 +5,26 @@ import com.geneway.alerts.AlertType;
 
 /**
  * Default implementation for the alert recipient.
- * @author Firas Swidan
  *
+ * @author Firas Swidan
  */
 public class DefaultAlertRecipient implements AlertRecipient {
 
-	private String recipient;
-	private AlertType alertType;
-	
-	public DefaultAlertRecipient(String recipient, AlertType alertType) {
-		this.recipient = recipient;
-		this.alertType = alertType;
-	}
-	
-	@Override
-	public String getRecipient() {
-		return this.recipient;
-	}
+  private String recipient;
+  private AlertType alertType;
 
-	@Override
-	public AlertType getAlertType() {
-		return this.alertType;
-	}
+  public DefaultAlertRecipient(String recipient, AlertType alertType) {
+    this.recipient = recipient;
+    this.alertType = alertType;
+  }
 
+  @Override
+  public String getRecipient() {
+    return this.recipient;
+  }
+
+  @Override
+  public AlertType getAlertType() {
+    return this.alertType;
+  }
 }

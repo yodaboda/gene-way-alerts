@@ -35,11 +35,18 @@ scripts/run_tests.sh
 TEST_RESULT=$?
 echo -e "\n${blue}Test result:$TEST_RESULT${no_color}\n"
 
+sh scripts/run_formatter.sh
+FORMATTER_RESULT=$?
+echo -e "\n${blue}Formatter result:$FORMATTER_RESULT${no_color}\n"
+if [[ $FORMATTER_RESULT -ne 0 ]]; then
+	echo -e "\n${red}Run 'gradle spotlessApply' to fix issues${no_color}\n"
+fi
+
 scripts/run_sonar.sh
 SONAR_RESULT=$?
 echo -e "\n${blue}Sonar result:$SONAR_RESULT${no_color}\n"
 
-RESULT=$((TEST_RESULT + SONAR_RESULT))
+RESULT=$((TEST_RESULT + FORMATTER_RESULT + SONAR_RESULT))
 
 # Restore changes
 git reset --hard -q && git stash apply --index -q && git stash drop -q
