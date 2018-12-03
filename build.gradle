@@ -6,15 +6,23 @@ buildscript {
   }
   dependencies {
     classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.6.2"
+    classpath "com.diffplug.spotless:spotless-plugin-gradle:3.16.0"
   }
 }
 
 apply plugin: "org.sonarqube"
 apply plugin: 'java'
 apply plugin: 'eclipse'
+apply plugin: "com.diffplug.gradle.spotless"
 
 
 apply from: '../gene-way-shared/config.gradle'
+
+spotless {
+  java {
+    googleJavaFormat()
+  }
+}
 
 sourceCompatibility = 1.7
 jar {
