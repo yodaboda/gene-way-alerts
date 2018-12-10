@@ -1,12 +1,7 @@
 package com.geneway.alerts.injection;
 
-import com.geneway.alerts.AlertMechanism;
-import com.geneway.alerts.AlertSpecification;
-import com.geneway.alerts.AlertType;
-import com.geneway.alerts.impl.EmailAlertMechanism;
-import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
 import java.util.Properties;
+
 import javax.inject.Named;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -14,6 +9,13 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMessage.RecipientType;
+
+import com.geneway.alerts.AlertMechanism;
+import com.geneway.alerts.AlertSpecification;
+import com.geneway.alerts.AlertType;
+import com.geneway.alerts.impl.EmailAlertMechanism;
+import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
 
 /**
  * Guice Module for providing AlertMechanism. This module depends on being provided with an <code>

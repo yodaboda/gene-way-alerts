@@ -6,14 +6,16 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.geneway.alerts.AlertSender;
 import javax.mail.Address;
 import javax.mail.MessagingException;
 import javax.mail.Transport;
 import javax.mail.internet.MimeMessage;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
+import com.geneway.alerts.AlertSender;
 
 public class EmailAlertMechanismTest {
 

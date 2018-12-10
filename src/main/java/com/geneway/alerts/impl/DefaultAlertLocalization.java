@@ -1,7 +1,8 @@
 package com.geneway.alerts.impl;
 
-import com.geneway.alerts.AlertLocalization;
 import java.util.Locale;
+
+import com.geneway.alerts.AlertLocalization;
 
 /**
  * Default localization implementation that does nothing.

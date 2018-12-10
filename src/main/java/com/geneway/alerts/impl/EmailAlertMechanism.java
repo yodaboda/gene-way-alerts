@@ -1,11 +1,12 @@
 package com.geneway.alerts.impl;
 
-import com.geneway.alerts.AlertMechanism;
-import com.geneway.alerts.AlertSender;
 import javax.inject.Inject;
 import javax.mail.MessagingException;
 import javax.mail.Transport;
 import javax.mail.internet.MimeMessage;
+
+import com.geneway.alerts.AlertMechanism;
+import com.geneway.alerts.AlertSender;
 
 /**
  * Sends alerts through email.
