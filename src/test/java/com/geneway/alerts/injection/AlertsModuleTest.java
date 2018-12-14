@@ -8,6 +8,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Locale;
 
 import javax.inject.Inject;
@@ -97,7 +98,7 @@ public class AlertsModuleTest {
     when(mockedAlertLocalization.localizeBody(bodyStrings)).thenReturn("body");
     when(mockedAlertLocalization.getLocale()).thenReturn(Locale.forLanguageTag("ar"));
     doReturn(USER_NAME).when(mockedAlertSender).getUserName();
-    doReturn("123456").when(mockedAlertSender).getPassword();
+    doReturn("123456".toCharArray()).when(mockedAlertSender).getPassword();
     doReturn(TestAlertsModule.LOCALHOST).when(mockedAlertSender).getHost();
     doReturn(USER_EMAIL).when(mockedAlertSender).getEmail();
 
@@ -105,7 +106,7 @@ public class AlertsModuleTest {
     TestAlertsModule.MAIL_SERVER.setUser(
         mockedAlertSender.getHost(),
         mockedAlertSender.getUserName(),
-        mockedAlertSender.getPassword());
+        Arrays.toString(mockedAlertSender.getPassword()));
   }
 
   @After

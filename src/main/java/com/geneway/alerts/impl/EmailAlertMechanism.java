@@ -1,5 +1,7 @@
 package com.geneway.alerts.impl;
 
+import java.util.Arrays;
+
 import javax.inject.Inject;
 import javax.mail.MessagingException;
 import javax.mail.Transport;
@@ -44,7 +46,7 @@ public class EmailAlertMechanism implements AlertMechanism {
   @Override
   public void send() throws MessagingException {
     transport.connect(
-        emailAlertSender.getHost(), emailAlertSender.getUserName(), emailAlertSender.getPassword());
+        emailAlertSender.getHost(), emailAlertSender.getUserName(), Arrays.toString(emailAlertSender.getPassword()));
     transport.sendMessage(generateMailMessage, generateMailMessage.getAllRecipients());
     transport.close();
   }

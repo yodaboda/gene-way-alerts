@@ -6,6 +6,8 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Arrays;
+
 import javax.mail.Address;
 import javax.mail.MessagingException;
 import javax.mail.Transport;
@@ -37,7 +39,7 @@ public class EmailAlertMechanismTest {
         .connect(
             emailAlertSender.getHost(),
             emailAlertSender.getUserName(),
-            emailAlertSender.getPassword());
+            Arrays.toString(emailAlertSender.getPassword()));
     doNothing().when(mockedTransport).sendMessage(mockedMimeMessage, addresses);
     doNothing().when(mockedTransport).close();
 
@@ -60,7 +62,7 @@ public class EmailAlertMechanismTest {
         .connect(
             emailAlertSender.getHost(),
             emailAlertSender.getUserName(),
-            emailAlertSender.getPassword());
+            Arrays.toString(emailAlertSender.getPassword()));
     doNothing().when(mockedTransport).sendMessage(mockedMimeMessage, addresses);
     doThrow(new MessagingException("cannot close")).when(mockedTransport).close();
 

@@ -17,7 +17,7 @@ public interface AlertSender {
    *
    * @return The login password of the alert sender
    */
-  public String getPassword();
+  public char[] getPassword();
   /**
    * The host of the alert sender
    *
