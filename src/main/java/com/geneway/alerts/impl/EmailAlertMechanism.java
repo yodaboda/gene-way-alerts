@@ -46,7 +46,9 @@ public class EmailAlertMechanism implements AlertMechanism {
   @Override
   public void send() throws MessagingException {
     transport.connect(
-        emailAlertSender.getHost(), emailAlertSender.getUserName(), Arrays.toString(emailAlertSender.getPassword()));
+        emailAlertSender.getHost(),
+        emailAlertSender.getUserName(),
+        Arrays.toString(emailAlertSender.getPassword()));
     transport.sendMessage(generateMailMessage, generateMailMessage.getAllRecipients());
     transport.close();
   }
