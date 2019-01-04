@@ -5,7 +5,11 @@ import static org.junit.Assert.assertEquals;
 import java.util.Locale;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
+import com.nutrinfomics.geneway.shared.testcategory.FastTest;
+
+@Category(value = {FastTest.class})
 public class DefaultAlertLocalizationTest {
 
   @Test

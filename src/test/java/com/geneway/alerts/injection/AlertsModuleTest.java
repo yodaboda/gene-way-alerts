@@ -25,6 +25,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -41,7 +42,9 @@ import com.google.inject.Guice;
 import com.google.inject.testing.fieldbinder.Bind;
 import com.google.inject.testing.fieldbinder.BoundFieldModule;
 import com.google.inject.util.Modules;
+import com.nutrinfomics.geneway.shared.testcategory.FastTest;
 
+@Category(value = {FastTest.class})
 public class AlertsModuleTest {
 
   @Rule public ExpectedException thrown = ExpectedException.none();
