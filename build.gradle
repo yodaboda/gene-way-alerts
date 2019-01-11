@@ -7,14 +7,14 @@ plugins {
  }
 
  jmeter {
-  //jmTestFiles = [file("src/test/jmeter/AlertsModuleTest.jmx")] //if jmx file is not in the default location
-  //jmSystemPropertiesFiles= [file("src/test/jmeter/jmeter.properties")] //to add additional system properties
-  enableExtendedReports = true //produce Graphical and CSV reports
+  //jmTestFiles = [file("src/test/jmeter/AlertsModuleTest.jmx")] 
+  //jmSystemPropertiesFiles= [file("src/test/jmeter/jmeter.properties")] 
+  enableExtendedReports = true 
 }
 
 apply plugin: 'java-library'
  
-apply from: '../gene-way-shared/config.gradle'
+apply from: "https://raw.githubusercontent.com/yodaboda/gene-way-shared/master/config.gradle"
 
 
  
