@@ -17,6 +17,11 @@
 
 package com.geneway.alerts;
 
+/**
+ * The specification used for sending alerts to end users.
+ * @author Firas Swidan
+ *
+ */
 public interface AlertSpecification {
   public AlertRecipient getAlertRecipient();
 

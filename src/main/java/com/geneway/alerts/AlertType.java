@@ -17,6 +17,11 @@
 
 package com.geneway.alerts;
 
+/**
+ * The type of the alert being sent.
+ * @author Firas Swidan
+ *
+ */
 public enum AlertType {
   E_MAIL,
   SMS
