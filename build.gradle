@@ -2,20 +2,11 @@
 
 buildscript { repositories { mavenCentral() }} // needed for google-java-format
 
-plugins {
-     id "net.foragerr.jmeter" version "1.1.0-4.0"
- }
-
- jmeter {
-  //jmTestFiles = [file("src/test/jmeter/AlertsModuleTest.jmx")] 
-  //jmSystemPropertiesFiles= [file("src/test/jmeter/jmeter.properties")] 
-  enableExtendedReports = true 
-}
 
 apply plugin: 'java-library'
  
-apply from: "https://raw.githubusercontent.com/yodaboda/gene-way-shared/master/config.gradle"
-
+//apply from: "https://raw.githubusercontent.com/yodaboda/gene-way-shared/master/config.gradle"
+apply from: "../gene-way-shared/config.gradle"
 
  
 
@@ -42,16 +33,14 @@ dependencies {
 	testImplementation 'org.apache.logging.log4j:log4j-core:2.11.1:tests'
 	testImplementation 'com.google.inject.extensions:guice-testlib:4.1.0'
 	testImplementation 'com.icegreen:greenmail:1.5.8'
+	
 	testImplementation fileTree(dir: '../gene-way-alerts-testing/build/libs', include: ['*.jar'])
-	testImplementation fileTree(dir: '../gene-way-shared/build/libs', include: ['*.jar'])
+//	testImplementation fileTree(dir: '../gene-way-shared/build/libs', include: ['*.jar'])
+	
+	
+	testImplementation 'com.gene-play:gene-way-shared:0.4.7'
 }
 
 test {
     systemProperties 'property': 'value'
-}
-
-task jarTests(type: Jar) {
-  from sourceSets.test.output
-  destinationDir = file("$rootDir/jmeter/lib/junit")
-  baseName = "gene-way-alerts-tests"
 }
