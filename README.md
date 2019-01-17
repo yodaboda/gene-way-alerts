@@ -1,6 +1,6 @@
 Gene-Way Alerts Module
 ======
-[![Build Status](https://dev.azure.com/firasswidan/firasswidan/_apis/build/status/yodaboda.gene-way-alerts?branchName=master)](https://dev.azure.com/firasswidan/firasswidan/_build/latest?definitionId=1?branchName=master)
+[![Build Status](https://travis-ci.com/yodaboda/gene-way-alerts.svg?token=sWQepzpWF3gMsecSGq7U&branch=master)](https://travis-ci.com/yodaboda/gene-way-alerts)
 ![license](https://img.shields.io/github/license/yodaboda/gene-way-alerts.svg)
       
 **Gene-Way-App** is an MVP project for tracking snack consumption. It uses a Server-Client architecture for providing an interactive mobile front-end that can communicate with the backend-server.
