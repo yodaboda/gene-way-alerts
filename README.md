@@ -8,6 +8,17 @@ Gene-Way Alerts Module
 ## Gene-Way-Alerts 
 Is a Guice-module that provides functionality for sending alerts to end-users either through E-mail or SMS.
 
+## Getting the Package
+The latest release of the artifact is available on Maven Central, and can be installed using the following Maven dependency:
+
+```xml
+<dependency>
+  <groupId>com.gene-play</groupId>
+  <artifactId>gene-way-alerts</artifactId>
+  <version>0.4.7</version>
+</dependency>
+```
+
 ## Code Inspection
 
 A UML class diagram for the underlying class model is available under the UML directory and could be a good starting point for reviewing the code.
